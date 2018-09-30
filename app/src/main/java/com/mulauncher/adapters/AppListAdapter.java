@@ -80,6 +80,14 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHold
             appsList.add(app);
         }
 
+        // Sort based on app name (label) ignoring case
+        Collections.sort(appsList, new Comparator<AppInfo>() {
+            @Override
+            public int compare(AppInfo o1, AppInfo o2) {
+                return o1.getLabel().toString().toLowerCase().compareTo(o2.getLabel().toString().toLowerCase());
+            }
+        });
+
     }
 
     @Override
