@@ -16,6 +16,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+        </activity>
+        <activity android:name=".activities.AppTourActivity" android:theme="@style/Theme.Intro">
+
         </activity>
     </application>
 

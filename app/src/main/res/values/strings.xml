@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">MuLauncher</string>
+    <string name="Launcher_Title">Mutative Launcher</string>
+    <string name="title_1">Personalization</string>
+    <string name="description_1">One Device Multiple Users.Each User will see the apps, which he has access, can customize home screen and app drawer</string>
+    <string name="title_2">Adapt with surrounding</string>
+    <string name="description_2">Brightness will adjust according to light conditions, text will enhance depending on the user state,profiles of a user will be launched using current location or known surrounding</string>
+    <string name="title_3">Quick Access</string>
+    <string name="description_3">Apps used frequently will be present on finger tips</string>
 </resources>
