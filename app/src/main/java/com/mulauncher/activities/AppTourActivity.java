@@ -51,8 +51,8 @@ public class AppTourActivity extends IntroActivity {
                 .build());
 
 
-        autoplay(2000, INFINITE);
-        setPageScrollDuration(1000);
+        autoplay(5000, INFINITE);
+        setPageScrollDuration(500);
 
     }
 }

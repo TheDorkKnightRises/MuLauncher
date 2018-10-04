@@ -18,10 +18,11 @@ public class HomeActivity extends AppCompatActivity {
     RecyclerView appListRecyclerView;
 
     protected void onCreate(Bundle savedInstanceState) {
-        Intent intent = new Intent(HomeActivity.this, AppTourActivity.class);
-        HomeActivity.this.startActivity(intent);
-
         super.onCreate(savedInstanceState);
+
+        Intent intent = new Intent(HomeActivity.this, AppTourActivity.class);
+        startActivity(intent);
+
         setContentView(R.layout.activity_home);
 
         appListRecyclerView = findViewById(R.id.appListRecyclerView);
