@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mulauncher.BuildConfig;
 import com.mulauncher.R;
 import com.mulauncher.models.AppInfo;
 
@@ -73,6 +74,8 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHold
 
         List<ResolveInfo> allApps = pm.queryIntentActivities(i, 0);
         for(ResolveInfo ri:allApps) {
+            if(ri.activityInfo.packageName.equals(BuildConfig.APPLICATION_ID))
+                continue;
             AppInfo app = new AppInfo();
             app.setLabel(ri.loadLabel(pm));
             app.setPackageName(ri.activityInfo.packageName);
