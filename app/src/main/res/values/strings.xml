@@ -7,4 +7,14 @@
     <string name="description_2">Brightness will adjust according to light conditions, text will enhance depending on the user state,profiles of a user will be launched using current location or known surrounding</string>
     <string name="title_3">Quick Access</string>
     <string name="description_3">Apps used frequently will be present on finger tips</string>
+
+    <string name="add_user">Add user</string>
+    <string name="name">Name</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="add_user_desc">The first user will be the administrator by default, and can add and manage other users</string>
+    <string name="use_face_unlock">Use face unlock</string>
+    <string name="use_fingerprint">Use fingerprint</string>
+    <string name="welcome_comma">Welcome,\ </string>
+    <string name="user">User</string>
 </resources>

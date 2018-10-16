@@ -1,17 +1,21 @@
-package com.mulauncher.activities;
+package com.mulauncher.ui.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.heinrichreimersoftware.materialintro.app.IntroActivity;
+import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
 import com.heinrichreimersoftware.materialintro.slide.SimpleSlide;
+import com.heinrichreimersoftware.materialintro.view.FadeableViewPager;
 import com.mulauncher.R;
+import com.mulauncher.ui.fragments.AddUserDetailsFragment;
 
 public class AppTourActivity extends IntroActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setFullscreen(true);
 
         super.onCreate(savedInstanceState);
+
+        final AddUserDetailsFragment addUserDetailsFragment = AddUserDetailsFragment.newInstance(this);
 
         addSlide(new SimpleSlide.Builder()
                 .title(R.string.Launcher_Title)
@@ -34,7 +38,6 @@ public class AppTourActivity extends IntroActivity {
                 .image(R.drawable.adapt)
                 .title(R.string.title_2)
                 .description(R.string.description_2)
-                //.image(R.drawable.image_1)
                 .background(R.color.background_1)
                 .backgroundDark(R.color.background_dark_1)
                 .scrollable(false)
@@ -44,15 +47,47 @@ public class AppTourActivity extends IntroActivity {
                 .image(R.drawable.quick_access)
                 .title(R.string.title_3)
                 .description(R.string.description_3)
-                //.image(R.drawable.image_1)
                 .background(R.color.background_1)
                 .backgroundDark(R.color.background_dark_1)
                 .scrollable(false)
                 .build());
 
+        addSlide(new SimpleSlide.Builder()
+                .title(R.string.add_user)
+                .description(R.string.add_user_desc)
+                .background(R.color.background_1)
+                .backgroundDark(R.color.background_dark_1)
+                .scrollable(false)
+                .build());
+
+        addSlide(new FragmentSlide.Builder()
+                .background(R.color.background_1)
+                .backgroundDark(R.color.background_dark_1)
+                .fragment(addUserDetailsFragment)
+                .build());
 
         autoplay(5000, INFINITE);
         setPageScrollDuration(500);
 
+        addOnPageChangeListener(new FadeableViewPager.OnOverscrollPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+                if (i == 5) {
+                    addUserDetailsFragment.saveDetails();
+                }
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
+
     }
+
 }

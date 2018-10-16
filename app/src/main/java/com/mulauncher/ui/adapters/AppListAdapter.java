@@ -1,4 +1,4 @@
-package com.mulauncher.adapters;
+package com.mulauncher.ui.adapters;
 
 import android.content.Context;
 import android.content.Intent;
