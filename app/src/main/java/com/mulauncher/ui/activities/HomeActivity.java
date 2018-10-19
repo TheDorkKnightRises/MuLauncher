@@ -14,17 +14,22 @@ import com.mulauncher.ui.adapters.AppListAdapter;
 
 public class HomeActivity extends AppCompatActivity {
     RecyclerView appListRecyclerView;
-    SharedPreferences user_preferences;
+    SharedPreferences app_preferences, user_preferences;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent intent = new Intent(HomeActivity.this, AppTourActivity.class);
-        startActivity(intent);
+        app_preferences = getSharedPreferences(AppConstants.APP_PREFERENCES, MODE_PRIVATE);
+        user_preferences = getSharedPreferences(AppConstants.USER_PREFERENCES, MODE_PRIVATE);
+
+        if (app_preferences.getBoolean(AppConstants.FIRST_LAUNCH, true)) {
+            Intent intent = new Intent(HomeActivity.this, AppTourActivity.class);
+            startActivity(intent);
+            app_preferences.edit().putBoolean(AppConstants.FIRST_LAUNCH, false).apply();
+        }
 
         setContentView(R.layout.activity_home);
 
-        user_preferences = getSharedPreferences(AppConstants.USER_PREFERENCES, MODE_PRIVATE);
 
         appListRecyclerView = findViewById(R.id.appListRecyclerView);
         appListRecyclerView.setAdapter(new AppListAdapter(this, AppListAdapter.TYPE_LIST));
