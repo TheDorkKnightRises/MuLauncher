@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.mulauncher.AppConstants;
@@ -15,6 +17,7 @@ import com.mulauncher.ui.adapters.AppListAdapter;
 
 public class HomeActivity extends AppCompatActivity {
     RecyclerView appListRecyclerView;
+    ImageButton settingsButton;
     SharedPreferences app_preferences, user_preferences;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +39,17 @@ public class HomeActivity extends AppCompatActivity {
         appListRecyclerView = findViewById(R.id.appListRecyclerView);
         appListRecyclerView.setAdapter(new AppListAdapter(this, AppListAdapter.TYPE_LIST));
         appListRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+
+        settingsButton = findViewById(R.id.settings_button);
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
     }
+
 
     @Override
     protected void onResume() {
@@ -51,4 +64,6 @@ public class HomeActivity extends AppCompatActivity {
     public void onBackPressed() {
 
     }
+
+
 }

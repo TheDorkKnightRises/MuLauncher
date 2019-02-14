@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mulauncher">
 
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,17 +14,20 @@
         <activity android:name=".ui.activities.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".ui.activities.AppTourActivity"
-            android:theme="@style/AppTheme">
-
-        </activity>
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.activities.SettingsActivity"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".ui.activities.FingerprintRegistration" />
+        <activity android:name=".ui.activities.FaceRegistration"></activity>
     </application>
 
 </manifest>

@@ -17,4 +17,8 @@
     <string name="use_fingerprint">Use fingerprint</string>
     <string name="welcome_comma">Welcome, %1$s</string>
     <string name="user">User</string>
+    <string name="instructions">Place your fingertip on the Home Button for scanning fingerprint</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="instructionsFace">Adjust the phone to scan the face properly</string>
 </resources>

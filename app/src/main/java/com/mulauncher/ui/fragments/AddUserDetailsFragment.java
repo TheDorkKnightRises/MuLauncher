@@ -1,20 +1,26 @@
 package com.mulauncher.ui.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.mulauncher.AppConstants;
 import com.mulauncher.R;
+import com.mulauncher.ui.activities.FaceRegistration;
+import com.mulauncher.ui.activities.FingerprintRegistration;
 
 public class AddUserDetailsFragment extends Fragment {
     Context context;
     EditText usernameEditText, passwordEditText; //, confirmPasswordEditText;
+    TextView face_lock, fingerprint;
 
     public AddUserDetailsFragment() {
         // Required empty public constructor
@@ -39,7 +45,24 @@ public class AddUserDetailsFragment extends Fragment {
 
         usernameEditText = view.findViewById(R.id.name_edittext);
         passwordEditText = view.findViewById(R.id.password_edittext);
+        face_lock = view.findViewById(R.id.button_face_lock);
+        fingerprint = view.findViewById(R.id.button_fingerprint);
         //confirmPasswordEditText = view.findViewById(R.id.confirm_password_edittext);
+
+        fingerprint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(AddUserDetailsFragment.this.context, FingerprintRegistration.class);
+                startActivity(i);
+            }
+        });
+        face_lock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(AddUserDetailsFragment.this.context, FaceRegistration.class);
+                startActivity(i);
+            }
+        });
 
         return view;
     }
@@ -50,6 +73,7 @@ public class AddUserDetailsFragment extends Fragment {
             preferences.edit()
                     .putString(AppConstants.USER_NAME, usernameEditText.getText().toString().trim())
                     .apply();
+            //create database here
         }
     }
 

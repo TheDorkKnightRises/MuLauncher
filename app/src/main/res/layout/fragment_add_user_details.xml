@@ -42,21 +42,31 @@
             android:hint="@string/confirm_password"
             android:inputType="textPassword" />
 
-        <CheckBox
-            android:id="@+id/checkbox_face_lock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <TextView
+            android:id="@+id/button_face_lock"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
             android:layout_margin="8dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableStart="@drawable/ic_face_black_24dp"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical"
             android:text="@string/use_face_unlock"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
-        <CheckBox
-            android:id="@+id/checkbox_fingerprint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <TextView
+            android:id="@+id/button_fingerprint"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
             android:layout_margin="8dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableStart="@drawable/ic_fingerprint_black_24dp"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical"
             android:text="@string/use_fingerprint"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
     </LinearLayout>
 
