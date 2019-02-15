@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +12,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.mulauncher.AppConstants;
+import com.mulauncher.LauncherApplication;
 import com.mulauncher.R;
+import com.mulauncher.models.User;
 import com.mulauncher.ui.activities.FaceRegistration;
 import com.mulauncher.ui.activities.FingerprintRegistration;
+
+import io.objectbox.Box;
 
 public class AddUserDetailsFragment extends Fragment {
     Context context;
     EditText usernameEditText, passwordEditText; //, confirmPasswordEditText;
     TextView face_lock, fingerprint;
-
+    Box userBox;
     public AddUserDetailsFragment() {
         // Required empty public constructor
     }
@@ -74,6 +77,8 @@ public class AddUserDetailsFragment extends Fragment {
                     .putString(AppConstants.USER_NAME, usernameEditText.getText().toString().trim())
                     .apply();
             //create database here
+            userBox = ((LauncherApplication) context.getApplicationContext()).getBoxStore().boxFor(User.class);
+            userBox.put(new User(0, usernameEditText.getText().toString(), passwordEditText.getText().toString()));
         }
     }
 

@@ -21,4 +21,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="instructionsFace">Adjust the phone to scan the face properly</string>
+    <string name="settings">Settings</string>
+    <string name="user_management">Manage Users</string>
+    <string name="location_management">Manage Location</string>
+    <string name="title_activity_location">Map</string>
+
+    <string name="mapbox_access_token">pk.eyJ1IjoicmFqZ2l0ZSIsImEiOiJjanM1cWpvaHEwZ3NyNDNvNWYzanBvaTZmIn0.XTtd22Qo6lk7J3OoOxVNuQ</string>
+
 </resources>

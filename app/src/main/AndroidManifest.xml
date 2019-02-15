@@ -3,6 +3,7 @@
     package="com.mulauncher">
 
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -27,7 +28,10 @@
             android:name=".ui.activities.SettingsActivity"
             android:theme="@style/AppTheme" />
         <activity android:name=".ui.activities.FingerprintRegistration" />
-        <activity android:name=".ui.activities.FaceRegistration"></activity>
+        <activity android:name=".ui.activities.FaceRegistration" />
+        <activity
+            android:name=".ui.activities.LocationActivity"
+            android:label="@string/title_activity_location"></activity>
     </application>
 
 </manifest>
