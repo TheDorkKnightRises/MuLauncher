@@ -32,4 +32,6 @@ dependencies {
     implementation "io.objectbox:objectbox-android:$objectboxVersion"
     implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:7.1.2'
     implementation 'com.google.android.gms:play-services-location:16.0.0'
+    implementation "com.android.support:design:28.0.0"
+
 }

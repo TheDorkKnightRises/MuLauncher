@@ -27,5 +27,16 @@
     <string name="title_activity_location">Map</string>
 
     <string name="mapbox_access_token">pk.eyJ1IjoicmFqZ2l0ZSIsImEiOiJjanM1cWpvaHEwZ3NyNDNvNWYzanBvaTZmIn0.XTtd22Qo6lk7J3OoOxVNuQ</string>
+    <string name="add_geofence">Add geofence</string>
+    <string name="location_permission_rationale">Access to location is required to setup geofences</string>
+    <string name="geofence_not_available">Geofence not available</string>
+    <string name="geofence_too_many_geofences">Too many geofences added</string>
+    <string name="geofence_too_many_pending_intents">Too many pending geofence requests</string>
+    <string name="unknown_geofence_error">Unknown geofence error</string>
+    <string name="geofence_transition_notification_text">Geofence transition detected</string>
+    <string name="geofence_transition_entered">Entered geofence</string>
+    <string name="geofence_transition_exited">Exited geofence</string>
+    <string name="unknown_geofence_transition">Unknown geofence transition</string>
+    <string name="geofences_added">Geofence added</string>
 
 </resources>
