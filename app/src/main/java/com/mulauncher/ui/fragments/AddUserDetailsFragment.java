@@ -25,6 +25,7 @@ public class AddUserDetailsFragment extends Fragment {
     EditText usernameEditText, passwordEditText; //, confirmPasswordEditText;
     TextView face_lock, fingerprint;
     Box userBox;
+
     public AddUserDetailsFragment() {
         // Required empty public constructor
     }
