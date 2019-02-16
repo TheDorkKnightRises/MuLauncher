@@ -1,5 +1,7 @@
 package com.mulauncher.ui.activities;
 
+import android.app.Activity;
+import android.app.KeyguardManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -32,6 +35,10 @@ public class HomeActivity extends AppCompatActivity {
             Log.d("First launch", "true");
             app_preferences.edit().putBoolean(AppConstants.FIRST_LAUNCH, false).apply();
         }
+
+        getWindow().addFlags(
+                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
+                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 
         setContentView(R.layout.activity_home);
 
