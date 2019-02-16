@@ -23,6 +23,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".ui.activities.AppTourActivity"
@@ -42,7 +43,12 @@
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".services.LockScreen"
+            android:enabled="true"
+            android:exported="true" />
 
+        <activity android:name=".ui.activities.LockScreenAppActivity"></activity>
     </application>
 
 </manifest>

@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.mulauncher.AppConstants;
 import com.mulauncher.R;
+import com.mulauncher.services.LockScreen;
 import com.mulauncher.ui.adapters.AppListAdapter;
 
 public class HomeActivity extends AppCompatActivity {
@@ -36,9 +37,13 @@ public class HomeActivity extends AppCompatActivity {
             app_preferences.edit().putBoolean(AppConstants.FIRST_LAUNCH, false).apply();
         }
 
-        getWindow().addFlags(
-                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
-                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON|
+                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD|
+                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED/*|
+                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON*/);
+
+        Intent serviceIntent = new Intent(this,LockScreen.class);
+        startService(serviceIntent);
 
         setContentView(R.layout.activity_home);
 
