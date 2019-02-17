@@ -8,9 +8,10 @@ import io.objectbox.annotation.Id;
 @Entity
 public class User {
     @Id
-    private long id;
+    public long id;
     private String username, password;
     //LocalDate dateOfBirth;
+    //Biometrics to be added in User model
 
     public User(long id, String username, String password) {
         this.id = id;

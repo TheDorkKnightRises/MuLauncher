@@ -14,6 +14,13 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        findViewById(R.id.add_profile).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SettingsActivity.this, CreateProfileActivity.class));
+            }
+        });
+
         findViewById(R.id.geofencing).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

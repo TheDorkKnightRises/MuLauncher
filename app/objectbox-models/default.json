@@ -22,10 +22,31 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "2:7283092721960082818",
+      "lastPropertyId": "3:6352666420581762527",
+      "name": "Profile",
+      "properties": [
+        {
+          "id": "1:6877854077683817562",
+          "name": "Id"
+        },
+        {
+          "id": "2:7892228128602500551",
+          "name": "profileName"
+        },
+        {
+          "id": "3:6352666420581762527",
+          "indexId": "1:1756889971596768297",
+          "name": "userId"
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "1:3190664739396598884",
-  "lastIndexId": "0:0",
+  "lastEntityId": "2:7283092721960082818",
+  "lastIndexId": "1:1756889971596768297",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 4,

@@ -1,6 +1,8 @@
 package com.mulauncher.ui.activities;
 
 import android.app.KeyguardManager;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneStateListener;
@@ -12,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.mulauncher.AppConstants;
 import com.mulauncher.LauncherApplication;
 import com.mulauncher.R;
 import com.mulauncher.models.User;
@@ -78,6 +81,10 @@ public class LockScreenActivity extends AppCompatActivity {
                     password.setText("");
                     Toast.makeText(LockScreenActivity.this, "Invalid Credentials", Toast.LENGTH_LONG).show();
                 } else {
+                    SharedPreferences preferences = getApplicationContext().getSharedPreferences(AppConstants.USER_PREFERENCES, Context.MODE_PRIVATE);
+                    preferences.edit()
+                            .putString(AppConstants.USER_NAME, username.getText().toString().trim())
+                            .apply();
                     finish();
                 }
             }
