@@ -9,7 +9,7 @@ import io.objectbox.annotation.Id;
 public class User {
     @Id
     private long id;
-    String username, password;
+    private String username, password;
     //LocalDate dateOfBirth;
 
     public User(long id, String username, String password) {

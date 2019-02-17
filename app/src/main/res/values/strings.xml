@@ -39,5 +39,6 @@
     <string name="unknown_geofence_transition">Unknown geofence transition</string>
     <string name="geofences_added">Geofence added</string>
     <string name="Unlock">Unlock</string>
+    <string name="Username">Username</string>
 
 </resources>

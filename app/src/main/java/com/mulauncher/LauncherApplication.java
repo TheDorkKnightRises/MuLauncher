@@ -14,7 +14,7 @@ public class LauncherApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        boxStore = MyObjectBox.builder().androidContext(LauncherApplication.this).build();
+        boxStore = MyObjectBox.builder().androidContext(this).build();
         Mapbox.getInstance(getApplicationContext(), getString(R.string.mapbox_access_token));
     }
 

@@ -9,11 +9,27 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import com.mulauncher.LauncherApplication;
 import com.mulauncher.R;
+import com.mulauncher.models.User;
+import com.mulauncher.models.User_;
+
+import java.util.List;
+
+import io.objectbox.Box;
+import io.objectbox.query.QueryBuilder;
+
+import static android.app.PendingIntent.getActivity;
 
 public class LockScreenActivity extends AppCompatActivity {
     Button bt;
+    EditText username, password;
+    Box userBox;
+    QueryBuilder builder;
+    List<User> user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,11 +37,17 @@ public class LockScreenActivity extends AppCompatActivity {
         //getWindow can be put over here
 
         getWindow().addFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-                        | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                        | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
                         | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
         );
+
+        try {
+            // disable keyguard
+            disableKeyguard();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
@@ -36,21 +58,31 @@ public class LockScreenActivity extends AppCompatActivity {
         telephonymanager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
 
         setContentView(R.layout.activity_lock_screen_app);
+
+        username = findViewById(R.id.editTextUsername);
+        password = findViewById(R.id.editTextPassword);
         bt = findViewById(R.id.unlockButton);
+
         bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                userBox = ((LauncherApplication) getApplication()).getBoxStore().boxFor(User.class);
+                builder = userBox.query();
+                builder.equal(User_.username, username.getText().toString())
+                        .equal(User_.password, password.getText().toString());
+
+                user = builder.build().find();
+
+                if (user.isEmpty()) {
+                    username.setText("");
+                    password.setText("");
+                    Toast.makeText(LockScreenActivity.this, "Invalid Credentials", Toast.LENGTH_LONG).show();
+                } else {
+                    finish();
+                }
             }
         });
 
-        try {
-            // disable keyguard
-            disableKeyguard();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     // Handle button clicks
