@@ -6,53 +6,60 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.location.Location;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofenceStatusCodes;
 import com.google.android.gms.location.GeofencingClient;
 import com.google.android.gms.location.GeofencingRequest;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.location.LocationComponent;
+import com.mapbox.mapboxsdk.location.modes.CameraMode;
+import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
-import com.mulauncher.AppConstants;
 import com.mulauncher.R;
 import com.mulauncher.services.GeofenceTransitionsJobIntentService;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-public class LocationActivity extends FragmentActivity implements OnCompleteListener<Void> {
+public class LocationActivity extends FragmentActivity implements OnCompleteListener<Void>, OnMapReadyCallback {
 
     private static final String TAG = LocationActivity.class.getSimpleName();
+    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
+    private static final int REQUEST_CHECK_SETTINGS = 35;
     private MapView mapView;
     private GeofencingClient mGeofencingClient;
-    private View mAddGeofencesButton;
     private ArrayList<Geofence> mGeofenceList;
-    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
-
-    private enum PendingGeofenceTask {
-        ADD, REMOVE, NONE
-    }
-
+    private FusedLocationProviderClient mFusedLocationClient;
+    private LocationComponent locationComponent;
     private PendingIntent mGeofencePendingIntent;
     private PendingGeofenceTask mPendingGeofenceTask = PendingGeofenceTask.NONE;
 
@@ -60,13 +67,20 @@ public class LocationActivity extends FragmentActivity implements OnCompleteList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
         mGeofencingClient = LocationServices.getGeofencingClient(this);
-
+        mGeofenceList = new ArrayList<>();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions();
+        } else {
+            createLocationRequest();
+        }
 
         setContentView(R.layout.activity_location);
 
-        mAddGeofencesButton = findViewById(R.id.add_geofence);
+        View mAddGeofencesButton = findViewById(R.id.add_geofence);
         mAddGeofencesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,32 +89,98 @@ public class LocationActivity extends FragmentActivity implements OnCompleteList
                     requestPermissions();
                     return;
                 }
-                addGeofences();
+                if (!mGeofenceList.isEmpty())
+                    addGeofences();
+                else
+                    Toast.makeText(LocationActivity.this, "Waiting for location", Toast.LENGTH_SHORT).show();
             }
         });
-
-        mGeofenceList = new ArrayList<>();
-        populateGeofenceList();
-        mGeofencingClient = LocationServices.getGeofencingClient(this);
 
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(new OnMapReadyCallback() {
+        mapView.getMapAsync(this);
+
+    }
+
+    protected void createLocationRequest() {
+        final LocationRequest mLocationRequest = LocationRequest.create();
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(mLocationRequest);
+
+        SettingsClient client = LocationServices.getSettingsClient(this);
+        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
+
+        task.addOnSuccessListener(this, new OnSuccessListener<LocationSettingsResponse>() {
+            @SuppressLint("MissingPermission")
             @Override
-            public void onMapReady(@NonNull MapboxMap mapboxMap) {
-
-                mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
-                    @Override
-                    public void onStyleLoaded(@NonNull Style style) {
-
-                        // Map is set up and the style has loaded. Now you can add data or make other map adjustments
-
-
-                    }
-                });
+            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                mFusedLocationClient.requestLocationUpdates(mLocationRequest,
+                        new LocationCallback() {
+                            @Override
+                            public void onLocationResult(LocationResult locationResult) {
+                                if (locationResult == null) {
+                                    return;
+                                }
+                                for (Location location : locationResult.getLocations()) {
+                                    populateGeofenceList(location);
+                                    locationComponent.forceLocationUpdate(location);
+                                }
+                            }
+                        },
+                        null /* Looper */);
             }
         });
 
+        task.addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if (e instanceof ResolvableApiException) {
+                    // Location settings are not satisfied, but this can be fixed
+                    // by showing the user a dialog.
+                    try {
+                        // Show the dialog by calling startResolutionForResult(),
+                        // and check the result in onActivityResult().
+                        ResolvableApiException resolvable = (ResolvableApiException) e;
+                        resolvable.startResolutionForResult(LocationActivity.this,
+                                REQUEST_CHECK_SETTINGS);
+                    } catch (IntentSender.SendIntentException sendEx) {
+                        // Ignore the error.
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onMapReady(@NonNull final MapboxMap mapboxMap) {
+
+        mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
+            @Override
+            public void onStyleLoaded(@NonNull Style style) {
+                if (ActivityCompat.checkSelfPermission(LocationActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions();
+                } else {
+                    // Get an instance of the component
+                    locationComponent = mapboxMap.getLocationComponent();
+
+                    // Activate with options
+                    locationComponent.activateLocationComponent(LocationActivity.this, mapboxMap.getStyle());
+
+                    // Enable to make component visible
+                    locationComponent.setLocationComponentEnabled(true);
+
+                    // Set the component's render mode
+                    locationComponent.setRenderMode(RenderMode.COMPASS);
+
+                    // Set the component's camera mode
+                    locationComponent.setCameraMode(CameraMode.TRACKING);
+                }
+            }
+        });
     }
 
     @Override
@@ -174,7 +254,6 @@ public class LocationActivity extends FragmentActivity implements OnCompleteList
         return builder.build();
     }
 
-
     private PendingIntent getGeofencePendingIntent() {
         // Reuse the PendingIntent if we already have it.
         if (mGeofencePendingIntent != null) {
@@ -195,23 +274,18 @@ public class LocationActivity extends FragmentActivity implements OnCompleteList
         }
     }
 
-    private void populateGeofenceList() {
-        HashMap<String, LatLng> locations = new HashMap<>();
-        // TODO: Replace Googleplex location with current user location
-        locations.put("GOOGLE", new LatLng(37.422611, -122.0840577));
-        for (Map.Entry<String, LatLng> entry : locations.entrySet()) {
-
+    private void populateGeofenceList(Location location) {
             mGeofenceList.add(new Geofence.Builder()
                     // Set the request ID of the geofence. This is a string to identify this
                     // geofence.
-                    .setRequestId(entry.getKey())
+                    .setRequestId(location.toString())
 
                     .setExpirationDuration(2 ^ 47 - 1)
 
                     // Set the circular region of this geofence.
                     .setCircularRegion(
-                            entry.getValue().getLatitude(),
-                            entry.getValue().getLongitude(),
+                            location.getLatitude(),
+                            location.getLongitude(),
                             100
                     )
 
@@ -222,9 +296,7 @@ public class LocationActivity extends FragmentActivity implements OnCompleteList
 
                     // Create the geofence.
                     .build());
-        }
     }
-
 
     @Override
     protected void onStart() {
@@ -239,10 +311,45 @@ public class LocationActivity extends FragmentActivity implements OnCompleteList
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mapView.onStop();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
+    }
+
     private boolean checkPermissions() {
-        int permissionState = ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION);
-        return permissionState == PackageManager.PERMISSION_GRANTED;
+        return ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestPermissions() {
@@ -273,6 +380,12 @@ public class LocationActivity extends FragmentActivity implements OnCompleteList
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            createLocationRequest();
+    }
+
     private void showSnackbar(final String text) {
         View container = findViewById(android.R.id.content);
         if (container != null) {
@@ -287,6 +400,10 @@ public class LocationActivity extends FragmentActivity implements OnCompleteList
                 getString(mainTextStringId),
                 Snackbar.LENGTH_INDEFINITE)
                 .setAction(getString(actionStringId), listener).show();
+    }
+
+    private enum PendingGeofenceTask {
+        ADD, REMOVE, NONE
     }
 
     public class GeofenceBroadcastReceiver extends BroadcastReceiver {

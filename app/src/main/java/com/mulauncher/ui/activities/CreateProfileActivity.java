@@ -2,8 +2,8 @@ package com.mulauncher.ui.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -15,8 +15,6 @@ import com.mulauncher.models.Profile;
 import com.mulauncher.models.User;
 import com.mulauncher.models.User_;
 
-import java.util.List;
-
 import io.objectbox.Box;
 import io.objectbox.query.QueryBuilder;
 import io.objectbox.relation.ToOne;
@@ -24,7 +22,7 @@ import io.objectbox.relation.ToOne;
 public class CreateProfileActivity extends AppCompatActivity {
 
     EditText profilename;
-    TextView done;
+    TextView done, locationButton;
     SharedPreferences user_preferences;
     String username;
     Profile profile;
@@ -41,6 +39,7 @@ public class CreateProfileActivity extends AppCompatActivity {
         user_preferences = getSharedPreferences(AppConstants.USER_PREFERENCES, MODE_PRIVATE);
         profilename = findViewById(R.id.profile_edittext);
         done = findViewById(R.id.done_button);
+        locationButton = findViewById(R.id.location_button);
 
         done.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,6 +59,13 @@ public class CreateProfileActivity extends AppCompatActivity {
 
                 Intent i = new Intent(CreateProfileActivity.this, HomeActivity.class);
                 startActivity(i);
+            }
+        });
+
+        locationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(CreateProfileActivity.this, LocationActivity.class));
             }
         });
 
