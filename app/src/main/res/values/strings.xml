@@ -41,9 +41,11 @@
     <string name="Unlock">Unlock</string>
     <string name="Username">Username</string>
     <string name="add_profile">Add Profile</string>
+    <string name="configure_profile">Configure profile</string>
     <string name="profilename">Profile Name</string>
     <string name="setlocation">Set Location</string>
     <string name="done">Done</string>
-    <string name="profile">Your Profile</string>
+    <string name="def">Default</string>
+    <string name="manage_profiles">Manage profiles</string>
 
 </resources>

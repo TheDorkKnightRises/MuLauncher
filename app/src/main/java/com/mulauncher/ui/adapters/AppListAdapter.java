@@ -9,10 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mulauncher.BuildConfig;
 import com.mulauncher.R;
@@ -123,7 +121,6 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHold
     @Override
     public AppListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        //This is what adds the code we've written in here to our target view
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
         int layoutRes = (type == TYPE_LIST) ? R.layout.app_list_item : R.layout.app_grid_item;

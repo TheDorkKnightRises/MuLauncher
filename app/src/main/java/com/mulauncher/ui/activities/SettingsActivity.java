@@ -1,8 +1,8 @@
 package com.mulauncher.ui.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.mulauncher.R;
@@ -13,6 +13,13 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        findViewById(R.id.manage_profiles).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SettingsActivity.this, ManageProfilesActivity.class));
+            }
+        });
 
         findViewById(R.id.add_profile).setOnClickListener(new View.OnClickListener() {
             @Override

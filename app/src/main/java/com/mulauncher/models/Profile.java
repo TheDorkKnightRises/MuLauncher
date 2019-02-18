@@ -1,34 +1,21 @@
 package com.mulauncher.models;
 
-import java.util.ArrayList;
-
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
-import io.objectbox.relation.ToOne;
 
 @Entity
 public class Profile {
 
     @Id
     public long Id;
-    public ToOne<User> user;
+    private String username;
 
-    public ArrayList<AppInfo> getApplist() {
-        return applist;
+    public String getUsername() {
+        return username;
     }
 
-    public void setApplist(ArrayList<AppInfo> applist) {
-        this.applist = applist;
-    }
-
-    public ArrayList<AppInfo> applist;
-
-    public ToOne<User> getUser() {
-        return user;
-    }
-
-    public void setUser(ToOne<User> user) {
-        this.user = user;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public long getId() {

@@ -66,7 +66,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         String username = user_preferences.getString(AppConstants.USER_NAME, getString(R.string.user));
-        String profile = profile_preference.getString(AppConstants.PROFILE, getString(R.string.profile));
+        String profile = profile_preference.getString(AppConstants.PROFILE, getString(R.string.def));
         if (!"".equals(username)) {
             ((TextView) findViewById(R.id.welcome_header)).setText(getString(R.string.welcome_comma, username, profile));
         }

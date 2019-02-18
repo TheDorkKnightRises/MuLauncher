@@ -25,7 +25,7 @@
     },
     {
       "id": "2:7283092721960082818",
-      "lastPropertyId": "3:6352666420581762527",
+      "lastPropertyId": "4:5104247878290253379",
       "name": "Profile",
       "properties": [
         {
@@ -37,9 +37,8 @@
           "name": "profileName"
         },
         {
-          "id": "3:6352666420581762527",
-          "indexId": "1:1756889971596768297",
-          "name": "userId"
+          "id": "4:5104247878290253379",
+          "name": "username"
         }
       ],
       "relations": []
@@ -52,8 +51,12 @@
   "modelVersion": 4,
   "modelVersionParserMinimum": 4,
   "retiredEntityUids": [],
-  "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredIndexUids": [
+    1756889971596768297
+  ],
+  "retiredPropertyUids": [
+    6352666420581762527
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

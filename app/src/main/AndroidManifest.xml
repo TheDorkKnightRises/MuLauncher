@@ -23,7 +23,8 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".ui.activities.HomeActivity"
-            android:excludeFromRecents="true">
+            android:excludeFromRecents="true"
+            android:theme="@style/AppTheme.Translucent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,18 +33,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.activities.AppTourActivity"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".ui.activities.SettingsActivity"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".ui.activities.FingerprintRegistration" />
+        <activity android:name=".ui.activities.AppTourActivity" />
+        <activity android:name=".ui.activities.SettingsActivity" />
         <activity android:name=".ui.activities.FaceRegistration" />
-        <activity
-            android:name=".ui.activities.LocationActivity"
-            android:label="@string/title_activity_location"
-            android:theme="@style/Theme.AppCompat" />
+        <activity android:name=".ui.activities.LocationActivity" />
 
         <service
             android:name=".services.GeofenceTransitionsJobIntentService"
@@ -60,6 +53,7 @@
             android:excludeFromRecents="true"
             android:launchMode="singleTop" />
         <activity android:name=".ui.activities.CreateProfileActivity" />
+        <activity android:name=".ui.activities.ManageProfilesActivity"></activity>
     </application>
 
 </manifest>

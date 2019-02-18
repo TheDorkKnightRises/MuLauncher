@@ -16,14 +16,13 @@ import com.mulauncher.LauncherApplication;
 import com.mulauncher.R;
 import com.mulauncher.models.User;
 import com.mulauncher.ui.activities.FaceRegistration;
-import com.mulauncher.ui.activities.FingerprintRegistration;
 
 import io.objectbox.Box;
 
 public class AddUserDetailsFragment extends Fragment {
     Context context;
     EditText usernameEditText, passwordEditText; //, confirmPasswordEditText;
-    TextView face_lock, fingerprint;
+    TextView face_lock;
     Box userBox;
 
     public AddUserDetailsFragment() {
@@ -50,16 +49,8 @@ public class AddUserDetailsFragment extends Fragment {
         usernameEditText = view.findViewById(R.id.name_edittext);
         passwordEditText = view.findViewById(R.id.password_edittext);
         face_lock = view.findViewById(R.id.button_face_lock);
-        fingerprint = view.findViewById(R.id.button_fingerprint);
         //confirmPasswordEditText = view.findViewById(R.id.confirm_password_edittext);
 
-        fingerprint.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(AddUserDetailsFragment.this.context, FingerprintRegistration.class);
-                startActivity(i);
-            }
-        });
         face_lock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
