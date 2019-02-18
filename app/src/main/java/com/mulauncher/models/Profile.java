@@ -9,7 +9,7 @@ public class Profile {
 
     @Id
     public long Id;
-    private ToOne<User> user;
+    public ToOne<User> user;
 
     public ToOne<User> getUser() {
         return user;

@@ -1,5 +1,6 @@
 package com.mulauncher.ui.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -23,10 +24,11 @@ public class CreateProfileActivity extends AppCompatActivity {
 
     EditText profilename;
     TextView done, locationButton;
-    SharedPreferences user_preferences;
+    SharedPreferences user_preferences, profile_preference;
     String username;
     Profile profile;
-    ToOne<User> user;
+    //ToOne<User> user;
+    User user;
     Box userBox, profileBox;
     QueryBuilder builder;
 
@@ -37,6 +39,8 @@ public class CreateProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_profile);
 
         user_preferences = getSharedPreferences(AppConstants.USER_PREFERENCES, MODE_PRIVATE);
+        profile_preference = getSharedPreferences(AppConstants.PROFILE, MODE_PRIVATE);
+
         profilename = findViewById(R.id.profile_edittext);
         done = findViewById(R.id.done_button);
         locationButton = findViewById(R.id.location_button);
@@ -50,12 +54,16 @@ public class CreateProfileActivity extends AppCompatActivity {
                 profile = new Profile();
                 profile.setProfileName(profilename.getText().toString());
                 builder = userBox.query();
-                user = (ToOne<User>) builder.equal(User_.username, username).build().findFirst();
-                profile.setUser(user);
+                //user = (ToOne<User>) builder.equal(User_.username, username).build().findFirst();
+                user = (User) builder.equal(User_.username, username).build().findFirst();
+                //profile.setUser(user);
+                profile.user.setTarget(user);
                 profile.setId(0);
 
                 profileBox = ((LauncherApplication) getApplicationContext()).getBoxStore().boxFor(Profile.class);
                 profileBox.put(profile);
+
+                profile_preference.edit().putString(AppConstants.PROFILE, profile.getProfileName()).apply();
 
                 Intent i = new Intent(CreateProfileActivity.this, HomeActivity.class);
                 startActivity(i);

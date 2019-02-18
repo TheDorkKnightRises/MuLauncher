@@ -20,13 +20,14 @@ import com.mulauncher.ui.adapters.AppListAdapter;
 public class HomeActivity extends AppCompatActivity {
     RecyclerView appListRecyclerView;
     ImageButton settingsButton;
-    SharedPreferences app_preferences, user_preferences;
+    SharedPreferences app_preferences, user_preferences, profile_preference;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         app_preferences = getSharedPreferences(AppConstants.APP_PREFERENCES, MODE_PRIVATE);
         user_preferences = getSharedPreferences(AppConstants.USER_PREFERENCES, MODE_PRIVATE);
+        profile_preference = getSharedPreferences(AppConstants.PROFILE, MODE_PRIVATE);
 
         if (app_preferences.getBoolean(AppConstants.FIRST_LAUNCH, true)) {
             Intent intent = new Intent(HomeActivity.this, AppTourActivity.class);
@@ -65,8 +66,9 @@ public class HomeActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         String username = user_preferences.getString(AppConstants.USER_NAME, getString(R.string.user));
+        String profile = profile_preference.getString(AppConstants.PROFILE, getString(R.string.profile));
         if (!"".equals(username)) {
-            ((TextView) findViewById(R.id.welcome_header)).setText(getString(R.string.welcome_comma, username));
+            ((TextView) findViewById(R.id.welcome_header)).setText(getString(R.string.welcome_comma, username, profile));
         }
     }
 
