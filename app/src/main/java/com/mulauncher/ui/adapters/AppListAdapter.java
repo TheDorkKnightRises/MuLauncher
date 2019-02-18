@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,14 +30,15 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHold
     public static final int TYPE_GRID = 1;
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        int type;
         public TextView labelText;
         public ImageView icon;
 
-
         //This is the subclass ViewHolder which simply 
         //'holds the views' for us to show on each row
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, int type) {
             super(itemView);
+            this.type = type;
 
             //Finds the views from our row.xml
             labelText = itemView.findViewById(R.id.label);
@@ -51,7 +53,6 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHold
 
             Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(appsList.get(pos).getPackageName().toString());
             context.startActivity(launchIntent);
-            Toast.makeText(v.getContext(), appsList.get(pos).getLabel().toString(), Toast.LENGTH_LONG).show();
 
         }
     }
@@ -129,7 +130,6 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHold
 
         View view = inflater.inflate(layoutRes, parent, false);
 
-        ViewHolder viewHolder = new ViewHolder(view);
-        return viewHolder;
+        return new ViewHolder(view, type);
     }
 }

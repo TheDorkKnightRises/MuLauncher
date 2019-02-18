@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -15,6 +17,8 @@ import com.mulauncher.R;
 import com.mulauncher.models.Profile;
 import com.mulauncher.models.User;
 import com.mulauncher.models.User_;
+import com.mulauncher.ui.adapters.AppChecklistAdapter;
+import com.mulauncher.ui.adapters.AppListAdapter;
 
 import io.objectbox.Box;
 import io.objectbox.query.QueryBuilder;
@@ -24,6 +28,7 @@ public class CreateProfileActivity extends AppCompatActivity {
 
     EditText profilename;
     TextView done, locationButton;
+    RecyclerView appListRecyclerView;
     SharedPreferences user_preferences, profile_preference;
     String username;
     Profile profile;
@@ -76,6 +81,11 @@ public class CreateProfileActivity extends AppCompatActivity {
                 startActivity(new Intent(CreateProfileActivity.this, LocationActivity.class));
             }
         });
+
+        appListRecyclerView = findViewById(R.id.appListRecyclerView);
+        appListRecyclerView.setAdapter(new AppChecklistAdapter(this));
+        appListRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+
 
     }
 }

@@ -1,5 +1,7 @@
 package com.mulauncher.models;
 
+import java.util.ArrayList;
+
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
 import io.objectbox.relation.ToOne;
@@ -10,6 +12,16 @@ public class Profile {
     @Id
     public long Id;
     public ToOne<User> user;
+
+    public ArrayList<AppInfo> getApplist() {
+        return applist;
+    }
+
+    public void setApplist(ArrayList<AppInfo> applist) {
+        this.applist = applist;
+    }
+
+    public ArrayList<AppInfo> applist;
 
     public ToOne<User> getUser() {
         return user;
