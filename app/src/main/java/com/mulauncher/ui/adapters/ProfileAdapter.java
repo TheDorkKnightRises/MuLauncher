@@ -1,16 +1,21 @@
 package com.mulauncher.ui.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.mulauncher.AppConstants;
 import com.mulauncher.R;
 import com.mulauncher.models.Profile;
+import com.mulauncher.ui.activities.HomeActivity;
 
 import java.util.List;
 
@@ -65,9 +70,12 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
         @Override
         public void onClick(View v) {
             int pos = getAdapterPosition();
-
+            Log.d("Click", Integer.toString(pos));
             // TODO: Switch profile here
             String profileName = profileList.get(pos).getProfileName();
+            SharedPreferences preferences = context.getSharedPreferences(AppConstants.PROFILE, Context.MODE_PRIVATE);
+            preferences.edit().putString(AppConstants.PROFILE, profileName).apply();
+            context.startActivity(new Intent(context, HomeActivity.class));
         }
     }
 }

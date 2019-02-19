@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.mulauncher.AppConstants;
 import com.mulauncher.LauncherApplication;
@@ -33,6 +34,8 @@ public class ManageProfilesActivity extends AppCompatActivity {
         profileBox = ((LauncherApplication) getApplicationContext()).getBoxStore().boxFor(Profile.class);
         builder = profileBox.query();
         profileList = builder.equal(Profile_.username, preferences.getString(AppConstants.USER_NAME, "")).build().find();
+        for (Profile p : profileList)
+            Log.d("Profile", p.getProfileName() + "\n");
         profilesRecyclerView = findViewById(R.id.profilesRecyclerView);
         profilesRecyclerView.setAdapter(new ProfileAdapter(this, profileList));
         profilesRecyclerView.setLayoutManager(new LinearLayoutManager(this));

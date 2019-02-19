@@ -49,39 +49,60 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHold
         List<String> packagelist;
         SharedPreferences preferences = c.getSharedPreferences(AppConstants.PROFILE, Context.MODE_PRIVATE);
 
-        profileBox = ((LauncherApplication) c.getApplicationContext()).getBoxStore().boxFor(Profile.class);
-        profile = (Profile) profileBox.query().equal(Profile_.profileName, preferences.getString(AppConstants.PROFILE, "abc")).build().findFirst();
-        packages = profile.getAppsPackageList().split(" ");
-        packagelist = new ArrayList<>();
         appsList = new ArrayList<>();
-
-        for (String s : packages)
-            packagelist.add(s);
 
         Intent i = new Intent(Intent.ACTION_MAIN, null);
         i.addCategory(Intent.CATEGORY_LAUNCHER);
 
         List<ResolveInfo> allApps = pm.queryIntentActivities(i, 0);
-        for (ResolveInfo ri : allApps) {
-            if (ri.activityInfo.packageName.equals(BuildConfig.APPLICATION_ID))
-                continue;
-            if (packagelist.contains(ri.activityInfo.packageName)) {
+
+        if (preferences.getString(AppConstants.PROFILE, "abc").equals("abc")) {
+            for (ResolveInfo ri : allApps) {
+                if (ri.activityInfo.packageName.equals(BuildConfig.APPLICATION_ID))
+                    continue;
                 AppInfo app = new AppInfo();
                 app.setLabel(ri.loadLabel(pm));
                 app.setPackageName(ri.activityInfo.packageName);
                 app.setIcon(ri.activityInfo.loadIcon(pm));
                 appsList.add(app);
             }
-        }
 
-        // Sort based on app name (label) ignoring case
-        Collections.sort(appsList, new Comparator<AppInfo>() {
-            @Override
-            public int compare(AppInfo o1, AppInfo o2) {
-                return o1.getLabel().toString().toLowerCase().compareTo(o2.getLabel().toString().toLowerCase());
+            // Sort based on app name (label) ignoring case
+            Collections.sort(appsList, new Comparator<AppInfo>() {
+                @Override
+                public int compare(AppInfo o1, AppInfo o2) {
+                    return o1.getLabel().toString().toLowerCase().compareTo(o2.getLabel().toString().toLowerCase());
+                }
+            });
+        } else {
+            profileBox = ((LauncherApplication) c.getApplicationContext()).getBoxStore().boxFor(Profile.class);
+            profile = (Profile) profileBox.query().equal(Profile_.profileName, preferences.getString(AppConstants.PROFILE, "abc")).build().findFirst();
+            packages = profile.getAppsPackageList().split(" ");
+            packagelist = new ArrayList<>();
+
+            for (String s : packages)
+                packagelist.add(s);
+
+            for (ResolveInfo ri : allApps) {
+                if (ri.activityInfo.packageName.equals(BuildConfig.APPLICATION_ID))
+                    continue;
+                if (packagelist.contains(ri.activityInfo.packageName)) {
+                    AppInfo app = new AppInfo();
+                    app.setLabel(ri.loadLabel(pm));
+                    app.setPackageName(ri.activityInfo.packageName);
+                    app.setIcon(ri.activityInfo.loadIcon(pm));
+                    appsList.add(app);
+                }
             }
-        });
 
+            // Sort based on app name (label) ignoring case
+            Collections.sort(appsList, new Comparator<AppInfo>() {
+                @Override
+                public int compare(AppInfo o1, AppInfo o2) {
+                    return o1.getLabel().toString().toLowerCase().compareTo(o2.getLabel().toString().toLowerCase());
+                }
+            });
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

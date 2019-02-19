@@ -32,8 +32,8 @@ public class HomeActivity extends AppCompatActivity {
         if (app_preferences.getBoolean(AppConstants.FIRST_LAUNCH, true)) {
             Intent intent = new Intent(HomeActivity.this, AppTourActivity.class);
             startActivity(intent);
-            Intent i = new Intent(HomeActivity.this, CreateProfileActivity.class);
-            startActivity(i);
+            //Intent i = new Intent(HomeActivity.this, CreateProfileActivity.class);
+            //startActivity(i);
             Log.d("First launch", "true");
             app_preferences.edit().putBoolean(AppConstants.FIRST_LAUNCH, false).apply();
         }
