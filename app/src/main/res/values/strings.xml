@@ -48,5 +48,13 @@
     <string name="default_profile">Set Default Profile</string>
     <string name="edit">Edit</string>
     <string name="swipe_to_unlock">Swipe to unlock</string>
+    <string name="display_apps_as">Display apps as %1$s</string>
+    <string name="list">List</string>
+    <string name="grid">Grid</string>
+
+    <string-array name="list_types">
+        <item>List</item>
+        <item>Grid</item>
+    </string-array>
 
 </resources>

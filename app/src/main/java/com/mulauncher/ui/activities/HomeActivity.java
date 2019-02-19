@@ -20,6 +20,7 @@ public class HomeActivity extends AppCompatActivity {
     RecyclerView appListRecyclerView;
     ImageButton settingsButton;
     SharedPreferences app_preferences, user_preferences, profile_preference;
+    int gridSpan;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,8 +47,6 @@ public class HomeActivity extends AppCompatActivity {
 
         appListRecyclerView = findViewById(R.id.appListRecyclerView);
         appListRecyclerView.setAdapter(new AppListAdapter(this, AppListAdapter.TYPE_LIST));
-        appListRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-
 
         settingsButton = findViewById(R.id.settings_button);
         settingsButton.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +67,11 @@ public class HomeActivity extends AppCompatActivity {
         if (!"".equals(username)) {
             ((TextView) findViewById(R.id.welcome_header)).setText(getString(R.string.welcome_comma, username));
             ((TextView) findViewById(R.id.profile_header)).setText(profile);
+        }
+        int span = getSharedPreferences(AppConstants.APP_PREFERENCES, MODE_PRIVATE).getInt(AppConstants.APP_LIST_TYPE, 0);
+        if (gridSpan != span + 1) {
+            gridSpan = span + 1;
+            appListRecyclerView.setLayoutManager(new GridLayoutManager(this, gridSpan));
         }
     }
 
