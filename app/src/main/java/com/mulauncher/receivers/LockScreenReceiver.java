@@ -1,4 +1,4 @@
-package com.mulauncher.broadcastReceivers;
+package com.mulauncher.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

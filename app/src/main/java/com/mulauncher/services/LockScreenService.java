@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
 
-import com.mulauncher.broadcastReceivers.LockScreenReceiver;
+import com.mulauncher.receivers.LockScreenReceiver;
 
 public class LockScreenService extends Service {
 
