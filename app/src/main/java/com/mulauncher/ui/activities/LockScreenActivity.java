@@ -1,36 +1,23 @@
 package com.mulauncher.ui.activities;
 
 import android.app.KeyguardManager;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
-import com.mulauncher.AppConstants;
-import com.mulauncher.LauncherApplication;
 import com.mulauncher.R;
-import com.mulauncher.models.User;
-import com.mulauncher.models.User_;
+import com.mulauncher.ui.fragments.LockscreenClockFragment;
+import com.mulauncher.ui.fragments.LockscreenLoginFragment;
 
-import java.util.List;
-
-import io.objectbox.Box;
-import io.objectbox.query.QueryBuilder;
-
-public class LockScreenActivity extends AppCompatActivity {
-    Button bt;
-    EditText username, password;
-    Box userBox;
-    QueryBuilder builder;
-    List<User> user;
+public class LockScreenActivity extends AppCompatActivity implements LockscreenLoginFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,43 +38,22 @@ public class LockScreenActivity extends AppCompatActivity {
         }
 
         View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN);
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 
         StateListener phoneStateListener = new StateListener();
         TelephonyManager telephonymanager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
         telephonymanager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
 
         setContentView(R.layout.activity_lock_screen_app);
+        ViewPager pager = findViewById(R.id.viewPager);
+        pager.setAdapter(new SwipePagerAdapter(getSupportFragmentManager()));
 
-        username = findViewById(R.id.editTextUsername);
-        password = findViewById(R.id.editTextPassword);
-        bt = findViewById(R.id.unlockButton);
+    }
 
-        bt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userBox = ((LauncherApplication) getApplication()).getBoxStore().boxFor(User.class);
-                builder = userBox.query();
-                builder.equal(User_.username, username.getText().toString())
-                        .equal(User_.password, password.getText().toString());
-
-                user = builder.build().find();
-
-                if (user.isEmpty()) {
-                    username.setText("");
-                    password.setText("");
-                    Toast.makeText(LockScreenActivity.this, "Invalid Credentials", Toast.LENGTH_LONG).show();
-                } else {
-                    SharedPreferences preferences = getApplicationContext().getSharedPreferences(AppConstants.USER_PREFERENCES, Context.MODE_PRIVATE);
-                    preferences.edit()
-                            .putString(AppConstants.USER_NAME, username.getText().toString().trim())
-                            .apply();
-                    finish();
-                }
-            }
-        });
-
+    @Override
+    public void onLoginSuccess(String username) {
+        // TODO: User has logged in, now check which profile is appropriate for loading
+        finish();
     }
 
     // Handle button clicks
@@ -125,6 +91,29 @@ public class LockScreenActivity extends AppCompatActivity {
     public void onBackPressed() {
         // Don't allow back to dismiss.
         return;
+    }
+
+    private class SwipePagerAdapter extends FragmentPagerAdapter {
+
+        SwipePagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int pos) {
+            switch (pos) {
+
+                case 0:
+                    return new LockscreenClockFragment();
+                default:
+                    return new LockscreenLoginFragment();
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
     }
 
     class StateListener extends PhoneStateListener {

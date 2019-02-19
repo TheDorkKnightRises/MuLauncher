@@ -51,7 +51,8 @@
         <activity
             android:name=".ui.activities.LockScreenActivity"
             android:excludeFromRecents="true"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.Translucent" />
         <activity android:name=".ui.activities.CreateProfileActivity" />
         <activity android:name=".ui.activities.ManageProfilesActivity" />
     </application>
