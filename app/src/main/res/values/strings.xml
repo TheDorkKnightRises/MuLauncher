@@ -15,11 +15,9 @@
     <string name="add_user_desc">The first user will be the administrator by default, and can add and manage other users</string>
     <string name="use_face_unlock">Use face unlock</string>
     <string name="use_fingerprint">Use fingerprint</string>
-    <string name="welcome_comma">Welcome, %1$s (Profile:%2$s)</string>
+    <string name="welcome_comma">Welcome, %1$s</string>
     <string name="user">User</string>
     <string name="instructions">Place your fingertip on the Home Button for scanning fingerprint</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="instructionsFace">Adjust the phone to scan the face properly</string>
     <string name="settings">Settings</string>
     <string name="change_profile">Change Profile</string>
