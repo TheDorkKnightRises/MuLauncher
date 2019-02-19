@@ -48,5 +48,6 @@
     <string name="def">Default</string>
     <string name="manage_profiles">Manage profiles</string>
     <string name="default_profile">Set Default Profile</string>
+    <string name="edit">Edit</string>
 
 </resources>

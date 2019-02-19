@@ -3,47 +3,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activities.SettingsActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.activities.SettingsActivity">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="16dp"
         android:text="@string/settings"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:padding="16dp"
-        android:textAlignment="center" />
-
-    <TextView
-        android:id="@+id/manage_profiles"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:padding="16dp"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:gravity="center_vertical"
-        android:text="@string/manage_profiles"
-        android:textAppearance="@style/TextAppearance.AppCompat.Button" />
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
     <TextView
         android:id="@+id/add_profile"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:padding="16dp"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
+        android:focusable="true"
         android:gravity="center_vertical"
+        android:padding="16dp"
         android:text="@string/add_profile"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button" />
+
+    <TextView
+        android:id="@+id/manage_profiles"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:padding="16dp"
+        android:text="@string/manage_profiles"
         android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
     <TextView
         android:id="@+id/geofencing"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:padding="16dp"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
+        android:focusable="true"
         android:gravity="center_vertical"
+        android:padding="16dp"
         android:text="@string/location_management"
         android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 

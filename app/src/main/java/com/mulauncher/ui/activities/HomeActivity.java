@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -32,9 +31,6 @@ public class HomeActivity extends AppCompatActivity {
         if (app_preferences.getBoolean(AppConstants.FIRST_LAUNCH, true)) {
             Intent intent = new Intent(HomeActivity.this, AppTourActivity.class);
             startActivity(intent);
-            //Intent i = new Intent(HomeActivity.this, CreateProfileActivity.class);
-            //startActivity(i);
-            Log.d("First launch", "true");
             app_preferences.edit().putBoolean(AppConstants.FIRST_LAUNCH, false).apply();
         }
 

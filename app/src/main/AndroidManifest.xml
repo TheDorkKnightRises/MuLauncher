@@ -53,7 +53,7 @@
             android:excludeFromRecents="true"
             android:launchMode="singleTop" />
         <activity android:name=".ui.activities.CreateProfileActivity" />
-        <activity android:name=".ui.activities.ManageProfilesActivity"></activity>
+        <activity android:name=".ui.activities.ManageProfilesActivity" />
     </application>
 
 </manifest>

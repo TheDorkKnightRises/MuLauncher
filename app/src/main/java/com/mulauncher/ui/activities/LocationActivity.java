@@ -72,11 +72,6 @@ public class LocationActivity extends FragmentActivity implements OnCompleteList
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
         mGeofencingClient = LocationServices.getGeofencingClient(this);
         mGeofenceList = new ArrayList<>();
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions();
-        } else {
-            createLocationRequest();
-        }
 
         setContentView(R.layout.activity_location);
 
@@ -127,7 +122,8 @@ public class LocationActivity extends FragmentActivity implements OnCompleteList
                                 }
                                 for (Location location : locationResult.getLocations()) {
                                     populateGeofenceList(location);
-                                    locationComponent.forceLocationUpdate(location);
+                                    if (locationComponent != null)
+                                        locationComponent.forceLocationUpdate(location);
                                 }
                             }
                         },
@@ -178,6 +174,9 @@ public class LocationActivity extends FragmentActivity implements OnCompleteList
 
                     // Set the component's camera mode
                     locationComponent.setCameraMode(CameraMode.TRACKING);
+
+                    // Create a Location Request from Google Maps
+                    createLocationRequest();
                 }
             }
         });
@@ -384,13 +383,6 @@ public class LocationActivity extends FragmentActivity implements OnCompleteList
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED)
             createLocationRequest();
-    }
-
-    private void showSnackbar(final String text) {
-        View container = findViewById(android.R.id.content);
-        if (container != null) {
-            Snackbar.make(container, text, Snackbar.LENGTH_LONG).show();
-        }
     }
 
     private void showSnackbar(final int mainTextStringId, final int actionStringId,

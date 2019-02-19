@@ -20,8 +20,8 @@ public class AppTourActivity extends IntroActivity {
         addSlide(new SimpleSlide.Builder()
                 .title(R.string.Launcher_Title)
                 .image(R.drawable.intro_image)
-                .background(R.color.background_1)
-                .backgroundDark(R.color.background_dark_1)
+                .background(R.color.background)
+                .backgroundDark(R.color.backgroundDark)
                 .scrollable(false)
                 .build());
 
@@ -29,8 +29,8 @@ public class AppTourActivity extends IntroActivity {
                 .image(R.drawable.personalization)
                 .title(R.string.title_1)
                 .description(R.string.description_1)
-                .background(R.color.background_1)
-                .backgroundDark(R.color.background_dark_1)
+                .background(R.color.background)
+                .backgroundDark(R.color.backgroundDark)
                 .scrollable(false)
                 .build());
 
@@ -38,8 +38,8 @@ public class AppTourActivity extends IntroActivity {
                 .image(R.drawable.adapt)
                 .title(R.string.title_2)
                 .description(R.string.description_2)
-                .background(R.color.background_1)
-                .backgroundDark(R.color.background_dark_1)
+                .background(R.color.background)
+                .backgroundDark(R.color.backgroundDark)
                 .scrollable(false)
                 .build());
 
@@ -47,22 +47,22 @@ public class AppTourActivity extends IntroActivity {
                 .image(R.drawable.quick_access)
                 .title(R.string.title_3)
                 .description(R.string.description_3)
-                .background(R.color.background_1)
-                .backgroundDark(R.color.background_dark_1)
+                .background(R.color.background)
+                .backgroundDark(R.color.backgroundDark)
                 .scrollable(false)
                 .build());
 
         addSlide(new SimpleSlide.Builder()
                 .title(R.string.add_user)
                 .description(R.string.add_user_desc)
-                .background(R.color.background_1)
-                .backgroundDark(R.color.background_dark_1)
+                .background(R.color.background)
+                .backgroundDark(R.color.backgroundDark)
                 .scrollable(false)
                 .build());
 
         addSlide(new FragmentSlide.Builder()
-                .background(R.color.background_1)
-                .backgroundDark(R.color.background_dark_1)
+                .background(R.color.background)
+                .backgroundDark(R.color.backgroundDark)
                 .fragment(addUserDetailsFragment)
                 .build());
 
