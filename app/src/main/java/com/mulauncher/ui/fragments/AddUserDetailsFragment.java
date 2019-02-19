@@ -64,6 +64,7 @@ public class AddUserDetailsFragment extends Fragment {
 
     public void saveDetails() {
         SharedPreferences preferences = context.getSharedPreferences(AppConstants.USER_PREFERENCES, Context.MODE_PRIVATE);
+
         if (!usernameEditText.getText().toString().trim().isEmpty()) {
             preferences.edit()
                     .putString(AppConstants.USER_NAME, usernameEditText.getText().toString().trim())

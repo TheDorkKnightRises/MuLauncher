@@ -2,6 +2,7 @@ package com.mulauncher.ui.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
@@ -12,14 +13,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mulauncher.AppConstants;
 import com.mulauncher.BuildConfig;
+import com.mulauncher.LauncherApplication;
 import com.mulauncher.R;
 import com.mulauncher.models.AppInfo;
+import com.mulauncher.models.Profile;
+import com.mulauncher.models.Profile_;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import io.objectbox.Box;
 
 public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHolder> {
     private List<AppInfo> appsList;
@@ -36,7 +43,20 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHold
         //object we created to store the label, package name and icon
 
         PackageManager pm = c.getPackageManager();
+        Box profileBox;
+        Profile profile;
+        String[] packages;
+        List<String> packagelist;
+        SharedPreferences preferences = c.getSharedPreferences(AppConstants.PROFILE, Context.MODE_PRIVATE);
+
+        profileBox = ((LauncherApplication) c.getApplicationContext()).getBoxStore().boxFor(Profile.class);
+        profile = (Profile) profileBox.query().equal(Profile_.profileName, preferences.getString(AppConstants.PROFILE, "abc")).build().findFirst();
+        packages = profile.getAppsPackageList().split(" ");
+        packagelist = new ArrayList<>();
         appsList = new ArrayList<>();
+
+        for (String s : packages)
+            packagelist.add(s);
 
         Intent i = new Intent(Intent.ACTION_MAIN, null);
         i.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -45,11 +65,13 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHold
         for (ResolveInfo ri : allApps) {
             if (ri.activityInfo.packageName.equals(BuildConfig.APPLICATION_ID))
                 continue;
-            AppInfo app = new AppInfo();
-            app.setLabel(ri.loadLabel(pm));
-            app.setPackageName(ri.activityInfo.packageName);
-            app.setIcon(ri.activityInfo.loadIcon(pm));
-            appsList.add(app);
+            if (packagelist.contains(ri.activityInfo.packageName)) {
+                AppInfo app = new AppInfo();
+                app.setLabel(ri.loadLabel(pm));
+                app.setPackageName(ri.activityInfo.packageName);
+                app.setIcon(ri.activityInfo.loadIcon(pm));
+                appsList.add(app);
+            }
         }
 
         // Sort based on app name (label) ignoring case

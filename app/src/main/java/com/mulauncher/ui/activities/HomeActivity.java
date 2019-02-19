@@ -32,6 +32,8 @@ public class HomeActivity extends AppCompatActivity {
         if (app_preferences.getBoolean(AppConstants.FIRST_LAUNCH, true)) {
             Intent intent = new Intent(HomeActivity.this, AppTourActivity.class);
             startActivity(intent);
+            Intent i = new Intent(HomeActivity.this, CreateProfileActivity.class);
+            startActivity(i);
             Log.d("First launch", "true");
             app_preferences.edit().putBoolean(AppConstants.FIRST_LAUNCH, false).apply();
         }
@@ -46,10 +48,10 @@ public class HomeActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_home);
 
-
         appListRecyclerView = findViewById(R.id.appListRecyclerView);
         appListRecyclerView.setAdapter(new AppListAdapter(this, AppListAdapter.TYPE_LIST));
         appListRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+
 
         settingsButton = findViewById(R.id.settings_button);
         settingsButton.setOnClickListener(new View.OnClickListener() {
