@@ -25,7 +25,7 @@
     },
     {
       "id": "2:7283092721960082818",
-      "lastPropertyId": "4:5104247878290253379",
+      "lastPropertyId": "5:8838635658751002966",
       "name": "Profile",
       "properties": [
         {
@@ -39,6 +39,10 @@
         {
           "id": "4:5104247878290253379",
           "name": "username"
+        },
+        {
+          "id": "5:8838635658751002966",
+          "name": "appsPackageList"
         }
       ],
       "relations": []

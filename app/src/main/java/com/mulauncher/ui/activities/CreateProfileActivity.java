@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -13,26 +14,33 @@ import android.widget.TextView;
 import com.mulauncher.AppConstants;
 import com.mulauncher.LauncherApplication;
 import com.mulauncher.R;
+import com.mulauncher.interfaces.AppChecklistInterface;
 import com.mulauncher.models.Profile;
+import com.mulauncher.models.SelectedAppInfo;
 import com.mulauncher.ui.adapters.AppChecklistAdapter;
+
+import java.util.List;
 
 import io.objectbox.Box;
 
-public class CreateProfileActivity extends AppCompatActivity {
+public class CreateProfileActivity extends AppCompatActivity implements AppChecklistInterface {
 
     EditText profilename;
     TextView done, locationButton;
     RecyclerView appListRecyclerView;
     SharedPreferences user_preferences, profile_preference;
-    String username;
+    String username, apps_package;
     Profile profile;
     Box profileBox;
-
+    Boolean first;
+    List<SelectedAppInfo> AppList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_profile);
+
+        first = true;
 
         user_preferences = getSharedPreferences(AppConstants.USER_PREFERENCES, MODE_PRIVATE);
         profile_preference = getSharedPreferences(AppConstants.PROFILE, MODE_PRIVATE);
@@ -44,11 +52,27 @@ public class CreateProfileActivity extends AppCompatActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                for (SelectedAppInfo s : AppList) {
+                    if (s.isSelected()) {
+                        if (first) {
+                            apps_package = s.getAppInfo().getPackageName().toString();
+                            first = false;
+                        } else {
+                            apps_package = apps_package.concat(" " + s.getAppInfo().getPackageName().toString());
+                        }
+                        Log.d("CheckedApps", s.getAppInfo().getLabel() + "\n");
+                    }
+                }
+
+                Log.d("Apps_in_Profile", apps_package);
+
                 username = user_preferences.getString(AppConstants.USER_NAME, getString(R.string.user));
 
                 profile = new Profile();
                 profile.setProfileName(profilename.getText().toString());
                 profile.setUsername(username);
+                profile.setAppsPackageList(apps_package);
                 profile.setId(0);
 
                 profileBox = ((LauncherApplication) getApplicationContext()).getBoxStore().boxFor(Profile.class);
@@ -69,9 +93,14 @@ public class CreateProfileActivity extends AppCompatActivity {
         });
 
         appListRecyclerView = findViewById(R.id.appListRecyclerView);
-        appListRecyclerView.setAdapter(new AppChecklistAdapter(this));
+        appListRecyclerView.setAdapter(new AppChecklistAdapter(this, this));
         appListRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
 
 
+    }
+
+    @Override
+    public void setAppList(List<SelectedAppInfo> AppList) {
+        this.AppList = AppList;
     }
 }

@@ -275,27 +275,27 @@ public class LocationActivity extends FragmentActivity implements OnCompleteList
     }
 
     private void populateGeofenceList(Location location) {
-            mGeofenceList.add(new Geofence.Builder()
-                    // Set the request ID of the geofence. This is a string to identify this
-                    // geofence.
-                    .setRequestId(location.toString())
+        mGeofenceList.add(new Geofence.Builder()
+                // Set the request ID of the geofence. This is a string to identify this
+                // geofence.
+                .setRequestId(location.toString())
 
-                    .setExpirationDuration(2 ^ 47 - 1)
+                .setExpirationDuration(2 ^ 47 - 1)
 
-                    // Set the circular region of this geofence.
-                    .setCircularRegion(
-                            location.getLatitude(),
-                            location.getLongitude(),
-                            100
-                    )
+                // Set the circular region of this geofence.
+                .setCircularRegion(
+                        location.getLatitude(),
+                        location.getLongitude(),
+                        100
+                )
 
-                    // Set the transition types of interest. Alerts are only generated for these
-                    // transition. We track entry and exit transitions in this sample.
-                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
-                            Geofence.GEOFENCE_TRANSITION_EXIT)
+                // Set the transition types of interest. Alerts are only generated for these
+                // transition. We track entry and exit transitions in this sample.
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
+                        Geofence.GEOFENCE_TRANSITION_EXIT)
 
-                    // Create the geofence.
-                    .build());
+                // Create the geofence.
+                .build());
     }
 
     @Override

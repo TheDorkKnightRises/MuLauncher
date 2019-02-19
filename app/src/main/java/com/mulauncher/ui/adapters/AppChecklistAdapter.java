@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +16,7 @@ import android.widget.TextView;
 
 import com.mulauncher.BuildConfig;
 import com.mulauncher.R;
+import com.mulauncher.interfaces.AppChecklistInterface;
 import com.mulauncher.models.AppInfo;
 import com.mulauncher.models.SelectedAppInfo;
 
@@ -27,6 +27,43 @@ import java.util.List;
 
 public class AppChecklistAdapter extends RecyclerView.Adapter<AppChecklistAdapter.ViewHolder> {
     private List<SelectedAppInfo> appsList;
+    AppChecklistInterface acInterface;
+
+    public AppChecklistAdapter(Context c, AppChecklistInterface acInterface) {
+
+        //This is where we build our list of app details, using the app
+        //object we created to store the label, package name and icon
+
+        PackageManager pm = c.getPackageManager();
+        appsList = new ArrayList<>();
+        this.acInterface = acInterface;
+
+        Intent i = new Intent(Intent.ACTION_MAIN, null);
+        i.addCategory(Intent.CATEGORY_LAUNCHER);
+
+        List<ResolveInfo> allApps = pm.queryIntentActivities(i, 0);
+        for (ResolveInfo ri : allApps) {
+            if (ri.activityInfo.packageName.equals(BuildConfig.APPLICATION_ID))
+                continue;
+            AppInfo app = new AppInfo();
+            app.setLabel(ri.loadLabel(pm));
+            app.setPackageName(ri.activityInfo.packageName);
+            app.setIcon(ri.activityInfo.loadIcon(pm));
+            appsList.add(new SelectedAppInfo(app, false));
+        }
+
+        // Sort based on app name (label) ignoring case
+        Collections.sort(appsList, new Comparator<SelectedAppInfo>() {
+            @Override
+            public int compare(SelectedAppInfo o1, SelectedAppInfo o2) {
+                return o1.getAppInfo().getLabel().toString().toLowerCase()
+                        .compareTo(o2.getAppInfo().getLabel().toString().toLowerCase());
+            }
+        });
+
+        acInterface.setAppList(appsList);
+
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         int type;
@@ -52,41 +89,8 @@ public class AppChecklistAdapter extends RecyclerView.Adapter<AppChecklistAdapte
             boolean selected = !checkBox.isChecked();
             checkBox.setChecked(selected);
             appsList.get(pos).setSelected(selected);
+            acInterface.setAppList(appsList);
         }
-    }
-
-
-    public AppChecklistAdapter(Context c) {
-
-        //This is where we build our list of app details, using the app
-        //object we created to store the label, package name and icon
-
-        PackageManager pm = c.getPackageManager();
-        appsList = new ArrayList<>();
-
-        Intent i = new Intent(Intent.ACTION_MAIN, null);
-        i.addCategory(Intent.CATEGORY_LAUNCHER);
-
-        List<ResolveInfo> allApps = pm.queryIntentActivities(i, 0);
-        for (ResolveInfo ri : allApps) {
-            if (ri.activityInfo.packageName.equals(BuildConfig.APPLICATION_ID))
-                continue;
-            AppInfo app = new AppInfo();
-            app.setLabel(ri.loadLabel(pm));
-            app.setPackageName(ri.activityInfo.packageName);
-            app.setIcon(ri.activityInfo.loadIcon(pm));
-            appsList.add(new SelectedAppInfo(app, false));
-        }
-
-        // Sort based on app name (label) ignoring case
-        Collections.sort(appsList, new Comparator<SelectedAppInfo>() {
-            @Override
-            public int compare(SelectedAppInfo o1, SelectedAppInfo o2) {
-                return o1.getAppInfo().getLabel().toString().toLowerCase()
-                        .compareTo(o2.getAppInfo().getLabel().toString().toLowerCase());
-            }
-        });
-
     }
 
     @Override

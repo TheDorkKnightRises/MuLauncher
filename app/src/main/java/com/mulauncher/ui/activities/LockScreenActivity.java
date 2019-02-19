@@ -25,8 +25,6 @@ import java.util.List;
 import io.objectbox.Box;
 import io.objectbox.query.QueryBuilder;
 
-import static android.app.PendingIntent.getActivity;
-
 public class LockScreenActivity extends AppCompatActivity {
     Button bt;
     EditText username, password;

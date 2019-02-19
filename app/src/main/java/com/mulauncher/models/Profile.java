@@ -9,6 +9,16 @@ public class Profile {
     @Id
     public long Id;
     private String username;
+    private String appsPackageList;
+    private String profileName;
+
+    public String getAppsPackageList() {
+        return appsPackageList;
+    }
+
+    public void setAppsPackageList(String appsPackageList) {
+        this.appsPackageList = appsPackageList;
+    }
 
     public String getUsername() {
         return username;
@@ -25,8 +35,6 @@ public class Profile {
     public void setId(long id) {
         Id = id;
     }
-
-    private String profileName;
     //App List, Wallpaper, Location Details to be added
 
     public String getProfileName() {

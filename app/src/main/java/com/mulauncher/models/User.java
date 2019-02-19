@@ -1,7 +1,5 @@
 package com.mulauncher.models;
 
-import java.time.LocalDate;
-
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
 

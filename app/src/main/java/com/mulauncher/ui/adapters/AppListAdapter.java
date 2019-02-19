@@ -27,42 +27,12 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHold
     public static final int TYPE_LIST = 0;
     public static final int TYPE_GRID = 1;
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        int type;
-        public TextView labelText;
-        public ImageView icon;
-
-        //This is the subclass ViewHolder which simply 
-        //'holds the views' for us to show on each row
-        public ViewHolder(View itemView, int type) {
-            super(itemView);
-            this.type = type;
-
-            //Finds the views from our row.xml
-            labelText = itemView.findViewById(R.id.label);
-            icon = itemView.findViewById(R.id.icon);
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick (View v) {
-            int pos = getAdapterPosition();
-            Context context = v.getContext();
-
-            Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(appsList.get(pos).getPackageName().toString());
-            context.startActivity(launchIntent);
-
-        }
-    }
-
-
-
     public AppListAdapter(Context c, int type) {
 
         // Set type (list or grid)
         this.type = type;
 
-        //This is where we build our list of app details, using the app 
+        //This is where we build our list of app details, using the app
         //object we created to store the label, package name and icon
 
         PackageManager pm = c.getPackageManager();
@@ -72,8 +42,8 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHold
         i.addCategory(Intent.CATEGORY_LAUNCHER);
 
         List<ResolveInfo> allApps = pm.queryIntentActivities(i, 0);
-        for(ResolveInfo ri:allApps) {
-            if(ri.activityInfo.packageName.equals(BuildConfig.APPLICATION_ID))
+        for (ResolveInfo ri : allApps) {
+            if (ri.activityInfo.packageName.equals(BuildConfig.APPLICATION_ID))
                 continue;
             AppInfo app = new AppInfo();
             app.setLabel(ri.loadLabel(pm));
@@ -90,6 +60,34 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHold
             }
         });
 
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        int type;
+        public TextView labelText;
+        public ImageView icon;
+
+        //This is the subclass ViewHolder which simply
+        //'holds the views' for us to show on each row
+        public ViewHolder(View itemView, int type) {
+            super(itemView);
+            this.type = type;
+
+            //Finds the views from our row.xml
+            labelText = itemView.findViewById(R.id.label);
+            icon = itemView.findViewById(R.id.icon);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int pos = getAdapterPosition();
+            Context context = v.getContext();
+
+            Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(appsList.get(pos).getPackageName().toString());
+            context.startActivity(launchIntent);
+
+        }
     }
 
     @Override
