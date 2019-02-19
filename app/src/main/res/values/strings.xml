@@ -51,6 +51,7 @@
     <string name="display_apps_as">Display apps as %1$s</string>
     <string name="list">List</string>
     <string name="grid">Grid</string>
+    <string name="profile_name_empty_error">Profile name cannot be empty</string>
 
     <string-array name="list_types">
         <item>List</item>

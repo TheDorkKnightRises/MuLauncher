@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mulauncher.AppConstants;
 import com.mulauncher.LauncherApplication;
@@ -53,6 +54,12 @@ public class CreateProfileActivity extends AppCompatActivity implements AppCheck
             @Override
             public void onClick(View v) {
 
+                String profileName = profilename.getText().toString().trim();
+                if (profileName.isEmpty()) {
+                    Toast.makeText(CreateProfileActivity.this, getString(R.string.profile_name_empty_error), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 for (SelectedAppInfo s : AppList) {
                     if (s.isSelected()) {
                         if (first) {
@@ -70,7 +77,7 @@ public class CreateProfileActivity extends AppCompatActivity implements AppCheck
                 username = user_preferences.getString(AppConstants.USER_NAME, getString(R.string.user));
 
                 profile = new Profile();
-                profile.setProfileName(profilename.getText().toString());
+                profile.setProfileName(profileName);
                 profile.setUsername(username);
                 profile.setAppsPackageList(apps_package);
                 profile.setId(0);
