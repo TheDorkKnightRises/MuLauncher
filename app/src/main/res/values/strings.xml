@@ -52,6 +52,8 @@
     <string name="list">List</string>
     <string name="grid">Grid</string>
     <string name="profile_name_empty_error">Profile name cannot be empty</string>
+    <string name="confirm">Confirm</string>
+    <string name="invalid_admin_credentials">Invalid admin credentials</string>
 
     <string-array name="list_types">
         <item>List</item>

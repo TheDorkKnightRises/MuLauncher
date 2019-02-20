@@ -55,6 +55,7 @@
             android:theme="@style/AppTheme.Translucent" />
         <activity android:name=".ui.activities.CreateProfileActivity" />
         <activity android:name=".ui.activities.ManageProfilesActivity" />
+        <activity android:name=".ui.activities.AddUserActivity" />
     </application>
 
 </manifest>

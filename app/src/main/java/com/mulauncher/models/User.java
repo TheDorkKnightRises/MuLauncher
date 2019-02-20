@@ -7,6 +7,7 @@ import io.objectbox.annotation.Id;
 public class User {
     @Id
     public long id;
+    boolean isAdmin;
     private String username, password;
     //LocalDate dateOfBirth;
     //Biometrics to be added in User model
@@ -15,6 +16,13 @@ public class User {
         this.id = id;
         this.username = username;
         this.password = password;
+    }
+
+    public User(long id, String username, String password, boolean isAdmin) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.isAdmin = isAdmin;
     }
 
     public long getId() {
@@ -41,4 +49,11 @@ public class User {
         this.password = password;
     }
 
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
 }

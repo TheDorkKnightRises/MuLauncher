@@ -73,7 +73,7 @@ public class AppTourActivity extends IntroActivity {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
                 if (i == 5) {
-                    addUserDetailsFragment.saveDetails();
+                    addUserDetailsFragment.saveDetails(true);
                 }
             }
 

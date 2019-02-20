@@ -39,6 +39,12 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivity(new Intent(SettingsActivity.this, LocationActivity.class));
             }
         });
+        findViewById(R.id.add_user).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SettingsActivity.this, AddUserActivity.class));
+            }
+        });
 
         final SharedPreferences preferences = getSharedPreferences(AppConstants.APP_PREFERENCES, MODE_PRIVATE);
         listType = preferences.getInt(AppConstants.APP_LIST_TYPE, 0);

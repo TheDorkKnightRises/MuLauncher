@@ -1,7 +1,6 @@
 package com.mulauncher.ui.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,7 +14,6 @@ import com.mulauncher.AppConstants;
 import com.mulauncher.LauncherApplication;
 import com.mulauncher.R;
 import com.mulauncher.models.User;
-import com.mulauncher.ui.activities.FaceRegistration;
 
 import io.objectbox.Box;
 
@@ -48,9 +46,9 @@ public class AddUserDetailsFragment extends Fragment {
 
         usernameEditText = view.findViewById(R.id.name_edittext);
         passwordEditText = view.findViewById(R.id.password_edittext);
-        face_lock = view.findViewById(R.id.button_face_lock);
+        //face_lock = view.findViewById(R.id.button_face_lock);
         //confirmPasswordEditText = view.findViewById(R.id.confirm_password_edittext);
-
+        /*
         face_lock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,11 +56,12 @@ public class AddUserDetailsFragment extends Fragment {
                 startActivity(i);
             }
         });
+        */
 
         return view;
     }
 
-    public void saveDetails() {
+    public void saveDetails(boolean isAdmin) {
         SharedPreferences preferences = context.getSharedPreferences(AppConstants.USER_PREFERENCES, Context.MODE_PRIVATE);
 
         if (!usernameEditText.getText().toString().trim().isEmpty()) {
@@ -71,7 +70,7 @@ public class AddUserDetailsFragment extends Fragment {
                     .apply();
             //create database here
             userBox = ((LauncherApplication) context.getApplicationContext()).getBoxStore().boxFor(User.class);
-            userBox.put(new User(0, usernameEditText.getText().toString(), passwordEditText.getText().toString()));
+            userBox.put(new User(0, usernameEditText.getText().toString(), passwordEditText.getText().toString(), isAdmin));
         }
     }
 
