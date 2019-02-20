@@ -29,7 +29,11 @@ public class SettingsActivity extends AppCompatActivity {
         findViewById(R.id.add_profile).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SettingsActivity.this, CreateProfileActivity.class));
+                Intent i = new Intent(SettingsActivity.this, CreateProfileActivity.class);
+                String username = getSharedPreferences(AppConstants.USER_PREFERENCES, MODE_PRIVATE)
+                        .getString(AppConstants.USER_NAME, getString(R.string.user));
+                i.putExtra(AppConstants.USER_NAME, username);
+                startActivity(i);
             }
         });
 

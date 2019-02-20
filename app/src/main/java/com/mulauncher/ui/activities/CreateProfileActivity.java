@@ -1,5 +1,6 @@
 package com.mulauncher.ui.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -42,8 +43,6 @@ public class CreateProfileActivity extends AppCompatActivity implements AppCheck
         setContentView(R.layout.activity_create_profile);
 
         first = true;
-
-        user_preferences = getSharedPreferences(AppConstants.USER_PREFERENCES, MODE_PRIVATE);
         profile_preference = getSharedPreferences(AppConstants.PROFILE, MODE_PRIVATE);
 
         profilename = findViewById(R.id.profile_edittext);
@@ -73,22 +72,25 @@ public class CreateProfileActivity extends AppCompatActivity implements AppCheck
                 }
 
                 Log.d("Apps_in_Profile", apps_package);
-
-                username = user_preferences.getString(AppConstants.USER_NAME, getString(R.string.user));
-
+                Bundle extras = getIntent().getExtras();
+                if (extras == null) {
+                    Toast.makeText(CreateProfileActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                username = extras.getString(AppConstants.USER_NAME, "");
                 profile = new Profile();
                 profile.setProfileName(profileName);
                 profile.setUsername(username);
                 profile.setAppsPackageList(apps_package);
                 profile.setId(0);
-
                 profileBox = ((LauncherApplication) getApplicationContext()).getBoxStore().boxFor(Profile.class);
                 profileBox.put(profile);
 
                 profile_preference.edit().putString(AppConstants.PROFILE, profile.getProfileName()).apply();
 
-                Intent i = new Intent(CreateProfileActivity.this, HomeActivity.class);
-                startActivity(i);
+                Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_OK, returnIntent);
+                finish();
             }
         });
 
