@@ -49,9 +49,9 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHold
         String[] packages;
         List<String> packagelist;
         List<Profile> proList;
-        SharedPreferences preferences = c.getSharedPreferences(AppConstants.PROFILE, Context.MODE_PRIVATE);
         //Need to know more about SharedPreferences .....on using USER_NAME instead of USER_PREFERENCE..NULL Pointer Exception
         SharedPreferences userpref = c.getSharedPreferences(AppConstants.USER_PREFERENCES, Context.MODE_PRIVATE);
+        String username = userpref.getString(AppConstants.USER_NAME, "");
 
         appsList = new ArrayList<>();
 
@@ -60,7 +60,7 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHold
 
         List<ResolveInfo> allApps = pm.queryIntentActivities(i, 0);
 
-        if (preferences.getString(AppConstants.PROFILE, "abc").equals("abc")) {
+        if ("".equals(userpref.getString(username + AppConstants.USER_LAST_PROFILE, ""))) {
             for (ResolveInfo ri : allApps) {
                 if (ri.activityInfo.packageName.equals(BuildConfig.APPLICATION_ID))
                     continue;
@@ -85,8 +85,8 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHold
             for (Profile p : proList)
                 Log.d("AllProfiles", p.getProfileName() + " " + p.getUsername() + " " + p.getAppsPackageList());
 
-            profile = (Profile) profileBox.query().equal(Profile_.profileName, preferences.getString(AppConstants.PROFILE, ""))
-                    .equal(Profile_.username, userpref.getString(AppConstants.USER_NAME, ""))
+            profile = (Profile) profileBox.query().equal(Profile_.profileName, userpref.getString(username + AppConstants.USER_LAST_PROFILE, ""))
+                    .equal(Profile_.username, username)
                     .build().findFirst();
 
 

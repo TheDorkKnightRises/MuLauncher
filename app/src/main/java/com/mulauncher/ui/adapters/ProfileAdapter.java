@@ -73,8 +73,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
             Log.d("Click", Integer.toString(pos));
             // TODO: Switch profile here
             String profileName = profileList.get(pos).getProfileName();
-            SharedPreferences preferences = context.getSharedPreferences(AppConstants.PROFILE, Context.MODE_PRIVATE);
-            preferences.edit().putString(AppConstants.PROFILE, profileName).apply();
+            SharedPreferences preferences = context.getSharedPreferences(AppConstants.USER_PREFERENCES, Context.MODE_PRIVATE);
+            preferences.edit().putString(preferences.getString(AppConstants.USER_NAME, "")
+                    + AppConstants.USER_LAST_PROFILE, profileName).apply();
             context.startActivity(new Intent(context, HomeActivity.class));
         }
     }

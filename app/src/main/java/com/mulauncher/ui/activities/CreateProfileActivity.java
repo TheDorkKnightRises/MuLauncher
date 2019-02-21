@@ -30,7 +30,7 @@ public class CreateProfileActivity extends AppCompatActivity implements AppCheck
     EditText profilename;
     TextView done, locationButton;
     RecyclerView appListRecyclerView;
-    SharedPreferences user_preferences, profile_preference;
+    SharedPreferences user_preferences;
     String username, apps_package;
     Profile profile;
     Box profileBox;
@@ -43,7 +43,7 @@ public class CreateProfileActivity extends AppCompatActivity implements AppCheck
         setContentView(R.layout.activity_create_profile);
 
         first = true;
-        profile_preference = getSharedPreferences(AppConstants.PROFILE, MODE_PRIVATE);
+        user_preferences = getSharedPreferences(AppConstants.USER_PREFERENCES, MODE_PRIVATE);
 
         profilename = findViewById(R.id.profile_edittext);
         done = findViewById(R.id.done_button);
@@ -86,7 +86,7 @@ public class CreateProfileActivity extends AppCompatActivity implements AppCheck
                 profileBox = ((LauncherApplication) getApplicationContext()).getBoxStore().boxFor(Profile.class);
                 profileBox.put(profile);
 
-                profile_preference.edit().putString(AppConstants.PROFILE, profile.getProfileName()).apply();
+                user_preferences.edit().putString(username + AppConstants.USER_LAST_PROFILE, profile.getProfileName()).apply();
 
                 Intent returnIntent = new Intent();
                 setResult(Activity.RESULT_OK, returnIntent);
