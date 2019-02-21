@@ -381,7 +381,8 @@ public class LocationActivity extends FragmentActivity implements OnCompleteList
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+        if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE && grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED)
             createLocationRequest();
     }
 
