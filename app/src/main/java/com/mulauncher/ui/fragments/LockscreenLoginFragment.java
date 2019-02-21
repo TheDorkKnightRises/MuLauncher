@@ -52,10 +52,8 @@ public class LockscreenLoginFragment extends Fragment {
             public void onClick(View v) {
                 userBox = ((LauncherApplication) context.getApplicationContext()).getBoxStore().boxFor(User.class);
                 builder = userBox.query();
-                builder.equal(User_.username, usernameView.getText().toString())
-                        .equal(User_.password, passwordView.getText().toString());
-
-                user = builder.build().find();
+                user = builder.equal(User_.username, usernameView.getText().toString())
+                        .equal(User_.password, passwordView.getText().toString()).build().find();
 
                 if (user.isEmpty()) {
                     usernameView.setText("");

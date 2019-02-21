@@ -68,6 +68,10 @@ public class HomeActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.welcome_header)).setText(getString(R.string.welcome_comma, username));
             ((TextView) findViewById(R.id.profile_header)).setText(profile);
         }
+
+        appListRecyclerView = findViewById(R.id.appListRecyclerView);
+        appListRecyclerView.setAdapter(new AppListAdapter(this, AppListAdapter.TYPE_LIST));
+
         int span = getSharedPreferences(AppConstants.APP_PREFERENCES, MODE_PRIVATE).getInt(AppConstants.APP_LIST_TYPE, 0);
         if (gridSpan != span + 1) {
             gridSpan = span + 1;

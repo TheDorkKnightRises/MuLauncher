@@ -12,6 +12,10 @@ public class User {
     //LocalDate dateOfBirth;
     //Biometrics to be added in User model
 
+
+    public User() {
+    }
+
     public User(long id, String username, String password) {
         this.id = id;
         this.username = username;
