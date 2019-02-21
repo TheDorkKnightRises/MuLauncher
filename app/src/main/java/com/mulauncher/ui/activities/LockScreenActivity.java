@@ -38,7 +38,6 @@ public class LockScreenActivity extends AppCompatActivity implements LockscreenL
         }
 
         View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 
         StateListener phoneStateListener = new StateListener();
         TelephonyManager telephonymanager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
