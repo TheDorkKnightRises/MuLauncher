@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
@@ -45,10 +46,15 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mulauncher.AppConstants;
+import com.mulauncher.LauncherApplication;
 import com.mulauncher.R;
+import com.mulauncher.models.Profile;
 import com.mulauncher.services.GeofenceTransitionsJobIntentService;
 
 import java.util.ArrayList;
+
+import io.objectbox.Box;
 
 public class LocationActivity extends FragmentActivity implements OnCompleteListener<Void>, OnMapReadyCallback {
 
@@ -63,9 +69,18 @@ public class LocationActivity extends FragmentActivity implements OnCompleteList
     private PendingIntent mGeofencePendingIntent;
     private PendingGeofenceTask mPendingGeofenceTask = PendingGeofenceTask.NONE;
 
+    Profile profile;
+    Box profileBox;
+    SharedPreferences user_preferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        profile = (Profile) getIntent().getSerializableExtra("ProfileObject");
+        profileBox = ((LauncherApplication) getApplicationContext()).getBoxStore().boxFor(Profile.class);
+
+        user_preferences = getSharedPreferences(AppConstants.USER_PREFERENCES, MODE_PRIVATE);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -84,8 +99,12 @@ public class LocationActivity extends FragmentActivity implements OnCompleteList
                     requestPermissions();
                     return;
                 }
-                if (!mGeofenceList.isEmpty())
+                if (!mGeofenceList.isEmpty()) {
                     addGeofences();
+                    //ToDo: Add Location details into Profile
+                    profileBox.put(profile);
+                    user_preferences.edit().putString(profile.getUsername() + AppConstants.USER_LAST_PROFILE, profile.getProfileName()).apply();
+                }
                 else
                     Toast.makeText(LocationActivity.this, "Waiting for location", Toast.LENGTH_SHORT).show();
             }

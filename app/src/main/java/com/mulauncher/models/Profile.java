@@ -1,10 +1,12 @@
 package com.mulauncher.models;
 
+import java.io.Serializable;
+
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
 
 @Entity
-public class Profile {
+public class Profile implements Serializable {
 
     @Id
     public long Id;

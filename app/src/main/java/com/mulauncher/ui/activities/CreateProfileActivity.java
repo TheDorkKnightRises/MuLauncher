@@ -4,89 +4,73 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mulauncher.AppConstants;
-import com.mulauncher.LauncherApplication;
 import com.mulauncher.R;
-import com.mulauncher.interfaces.AppChecklistInterface;
+import com.mulauncher.interfaces.AppGenreChecklistInterface;
 import com.mulauncher.models.Profile;
-import com.mulauncher.models.SelectedAppInfo;
-import com.mulauncher.ui.adapters.AppChecklistAdapter;
+import com.mulauncher.ui.adapters.AppGenreAdapter;
 
 import java.util.List;
 
-import io.objectbox.Box;
-
-public class CreateProfileActivity extends AppCompatActivity implements AppChecklistInterface {
+public class CreateProfileActivity extends AppCompatActivity implements AppGenreChecklistInterface {
 
     EditText profilename;
-    TextView done, locationButton;
+    FloatingActionButton button;
     RecyclerView appListRecyclerView;
     SharedPreferences user_preferences;
-    String username, apps_package;
+    String username;
+    List<String> appGenreList;
+
     Profile profile;
-    Box profileBox;
-    Boolean first;
-    List<SelectedAppInfo> AppList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_profile);
 
-        first = true;
-        user_preferences = getSharedPreferences(AppConstants.USER_PREFERENCES, MODE_PRIVATE);
-
         profilename = findViewById(R.id.profile_edittext);
-        done = findViewById(R.id.done_button);
-        locationButton = findViewById(R.id.location_button);
+        button = findViewById(R.id.done_button);
+        profile = new Profile();
 
-        done.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 String profileName = profilename.getText().toString().trim();
+
                 if (profileName.isEmpty()) {
                     Toast.makeText(CreateProfileActivity.this, getString(R.string.profile_name_empty_error), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                for (SelectedAppInfo s : AppList) {
-                    if (s.isSelected()) {
-                        if (first) {
-                            apps_package = s.getAppInfo().getPackageName().toString();
-                            first = false;
-                        } else {
-                            apps_package = apps_package.concat(" " + s.getAppInfo().getPackageName().toString());
-                        }
-                        Log.d("CheckedApps", s.getAppInfo().getLabel() + "\n");
-                    }
-                }
-
-                Log.d("Apps_in_Profile", apps_package);
                 Bundle extras = getIntent().getExtras();
+
                 if (extras == null) {
                     Toast.makeText(CreateProfileActivity.this, "Error", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
                 username = extras.getString(AppConstants.USER_NAME, "");
-                profile = new Profile();
                 profile.setProfileName(profileName);
                 profile.setUsername(username);
-                profile.setAppsPackageList(apps_package);
-                profile.setId(0);
-                profileBox = ((LauncherApplication) getApplicationContext()).getBoxStore().boxFor(Profile.class);
-                profileBox.put(profile);
 
-                user_preferences.edit().putString(username + AppConstants.USER_LAST_PROFILE, profile.getProfileName()).apply();
+                if (appGenreList.isEmpty()) {
+                    Intent i = new Intent(CreateProfileActivity.this, AppsSelectionActivity.class);
+                    i.putExtra("ProfileObject", profile);
+                    startActivity(i);
+                } else {
+                    Intent i = new Intent(CreateProfileActivity.this, LocationActivity.class);
+                    i.putExtra("ProfileObject", profile);
+                    startActivity(i);
+                }
 
                 Intent returnIntent = new Intent();
                 setResult(Activity.RESULT_OK, returnIntent);
@@ -94,22 +78,14 @@ public class CreateProfileActivity extends AppCompatActivity implements AppCheck
             }
         });
 
-        locationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(CreateProfileActivity.this, LocationActivity.class));
-            }
-        });
 
         appListRecyclerView = findViewById(R.id.appListRecyclerView);
-        appListRecyclerView.setAdapter(new AppChecklistAdapter(this, this));
+        appListRecyclerView.setAdapter(new AppGenreAdapter(this, this));
         appListRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
-
-
     }
 
     @Override
-    public void setAppList(List<SelectedAppInfo> AppList) {
-        this.AppList = AppList;
+    public void setAppGenreList(List<String> appGenreList) {
+        this.appGenreList = appGenreList;
     }
 }
