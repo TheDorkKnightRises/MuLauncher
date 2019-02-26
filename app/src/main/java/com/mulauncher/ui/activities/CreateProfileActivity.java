@@ -19,6 +19,7 @@ import com.mulauncher.models.Profile;
 import com.mulauncher.ui.adapters.AppGenreAdapter;
 
 import java.util.List;
+import java.util.Map;
 
 public class CreateProfileActivity extends AppCompatActivity implements AppGenreChecklistInterface {
 
@@ -28,7 +29,7 @@ public class CreateProfileActivity extends AppCompatActivity implements AppGenre
     SharedPreferences user_preferences;
     String username;
     List<String> appGenreList;
-
+    Map<String, Integer> appGenreMap;
     Profile profile;
 
     @Override
@@ -85,7 +86,7 @@ public class CreateProfileActivity extends AppCompatActivity implements AppGenre
     }
 
     @Override
-    public void setAppGenreList(List<String> appGenreList) {
-        this.appGenreList = appGenreList;
+    public void setAppGenreList(Map<String, Integer> appGenreMap) {
+        this.appGenreMap = appGenreMap;
     }
 }

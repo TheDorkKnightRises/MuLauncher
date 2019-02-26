@@ -50,9 +50,29 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "3:3610538435076225807",
+      "lastPropertyId": "3:566477669826578078",
+      "name": "AppGenre",
+      "properties": [
+        {
+          "id": "1:9203726485806034085",
+          "name": "id"
+        },
+        {
+          "id": "2:7815842502445017369",
+          "name": "appPackage"
+        },
+        {
+          "id": "3:566477669826578078",
+          "name": "genre"
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "2:7283092721960082818",
+  "lastEntityId": "3:3610538435076225807",
   "lastIndexId": "1:1756889971596768297",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
