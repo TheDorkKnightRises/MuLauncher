@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mulauncher.AppConstants;
 import com.mulauncher.BuildConfig;
@@ -90,33 +91,39 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHold
                     .build().findFirst();
 
 
-            packages = profile.getAppsPackageList().split(" ");
-            packagelist = new ArrayList<>();
+            String profiles = profile.getAppsPackageList();
+            if (profiles.isEmpty()) {
+                Toast.makeText(c, c.getString(R.string.no_apps_in_profile), Toast.LENGTH_SHORT).show();
+            } else {
+                packages = profiles.split(" ");
+                packagelist = new ArrayList<>();
 
-            for (String s : packages) {
-                Log.d("Pack", s + "\n");
-                packagelist.add(s);
-            }
-
-            for (ResolveInfo ri : allApps) {
-                if (ri.activityInfo.packageName.equals(BuildConfig.APPLICATION_ID))
-                    continue;
-                if (packagelist.contains(ri.activityInfo.packageName)) {
-                    AppInfo app = new AppInfo();
-                    app.setLabel(ri.loadLabel(pm));
-                    app.setPackageName(ri.activityInfo.packageName);
-                    app.setIcon(ri.activityInfo.loadIcon(pm));
-                    appsList.add(app);
+                for (String s : packages) {
+                    Log.d("Pack", s + "\n");
+                    packagelist.add(s);
                 }
-            }
 
-            // Sort based on app name (label) ignoring case
-            Collections.sort(appsList, new Comparator<AppInfo>() {
-                @Override
-                public int compare(AppInfo o1, AppInfo o2) {
-                    return o1.getLabel().toString().toLowerCase().compareTo(o2.getLabel().toString().toLowerCase());
+                for (ResolveInfo ri : allApps) {
+                    if (ri.activityInfo.packageName.equals(BuildConfig.APPLICATION_ID))
+                        continue;
+                    if (packagelist.contains(ri.activityInfo.packageName)) {
+                        AppInfo app = new AppInfo();
+                        app.setLabel(ri.loadLabel(pm));
+                        app.setPackageName(ri.activityInfo.packageName);
+                        app.setIcon(ri.activityInfo.loadIcon(pm));
+                        appsList.add(app);
+                    }
                 }
-            });
+
+                // Sort based on app name (label) ignoring case
+                Collections.sort(appsList, new Comparator<AppInfo>() {
+                    @Override
+                    public int compare(AppInfo o1, AppInfo o2) {
+                        return o1.getLabel().toString().toLowerCase().compareTo(o2.getLabel().toString().toLowerCase());
+                    }
+                });
+
+            }
 
         }
     }

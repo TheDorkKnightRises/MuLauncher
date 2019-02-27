@@ -21,8 +21,8 @@ import com.mulauncher.models.AppGenre_;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +41,7 @@ public class AppGenreAdapter extends RecyclerView.Adapter<AppGenreAdapter.ViewHo
     public AppGenreAdapter(Context context, AppGenreChecklistInterface appGenreChecklistInterface) {
 
         this.appGenreChecklistInterface = appGenreChecklistInterface;
+        map = new HashMap<String, Integer>();
         genreBox = ((LauncherApplication) context.getApplicationContext()).getBoxStore().boxFor(AppGenre.class);
 
         FetchCategoryTask fetchCategoryTask = new FetchCategoryTask(context);
@@ -113,7 +114,7 @@ public class AppGenreAdapter extends RecyclerView.Adapter<AppGenreAdapter.ViewHo
         private final String TAG = FetchCategoryTask.class.getSimpleName();
         private PackageManager pm;
         private Context c;
-
+        private String genre;
         public FetchCategoryTask(Context c) {
             this.c = c;
         }
@@ -127,7 +128,7 @@ public class AppGenreAdapter extends RecyclerView.Adapter<AppGenreAdapter.ViewHo
             while (iterator.hasNext()) {
                 ApplicationInfo packageInfo = iterator.next();
 
-                if (genreBox.query().equal(AppGenre_.genre, packageInfo.packageName).build().findFirst() == null) {
+                if (genreBox.query().equal(AppGenre_.appPackage, packageInfo.packageName).build().findFirst() == null) {
                     String query_url = GOOGLE_URL + packageInfo.packageName;
                     Log.i(TAG, query_url);
                     category = getCategory(query_url);
@@ -141,11 +142,15 @@ public class AppGenreAdapter extends RecyclerView.Adapter<AppGenreAdapter.ViewHo
         private String getCategory(String query_url) {
 
             try {
+                //Document doc = Jsoup.connect("https://play.google.com/store/apps/details?id=com.mxtech.videoplayer.ad").get();
                 Document doc = Jsoup.connect(query_url).get();
-                Element link = doc.select("span[itemprop=genre]").first();
-                return link.text();
+                genre = doc.getElementsByAttributeValue("itemprop", "genre").text();
+                Log.d("Genre", genre);
+                return genre;
+
             } catch (Exception e) {
-                return ERROR;
+                e.printStackTrace();
+                return "Unknown";
             }
 
         }
