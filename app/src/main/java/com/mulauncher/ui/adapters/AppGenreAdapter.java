@@ -1,11 +1,7 @@
 package com.mulauncher.ui.adapters;
 
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +13,8 @@ import com.mulauncher.LauncherApplication;
 import com.mulauncher.R;
 import com.mulauncher.interfaces.AppGenreChecklistInterface;
 import com.mulauncher.models.AppGenre;
-import com.mulauncher.models.AppGenre_;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -31,8 +22,6 @@ import io.objectbox.Box;
 
 public class AppGenreAdapter extends RecyclerView.Adapter<AppGenreAdapter.ViewHolder> {
 
-    public final static String GOOGLE_URL = "https://play.google.com/store/apps/details?id=";
-    public static final String ERROR = "error";
     AppGenreChecklistInterface appGenreChecklistInterface;
     Box genreBox;
     private List<AppGenre> genre;
@@ -43,9 +32,6 @@ public class AppGenreAdapter extends RecyclerView.Adapter<AppGenreAdapter.ViewHo
         this.appGenreChecklistInterface = appGenreChecklistInterface;
         map = new HashMap<String, Integer>();
         genreBox = ((LauncherApplication) context.getApplicationContext()).getBoxStore().boxFor(AppGenre.class);
-
-        FetchCategoryTask fetchCategoryTask = new FetchCategoryTask(context);
-        fetchCategoryTask.execute();
 
         genre = genreBox.getAll();
         for (AppGenre a : genre)
@@ -109,52 +95,7 @@ public class AppGenreAdapter extends RecyclerView.Adapter<AppGenreAdapter.ViewHo
         return new AppGenreAdapter.ViewHolder(view);
     }
 
-    private class FetchCategoryTask extends AsyncTask<Void, Void, Void> {
 
-        private final String TAG = FetchCategoryTask.class.getSimpleName();
-        private PackageManager pm;
-        private Context c;
-        private String genre;
-        public FetchCategoryTask(Context c) {
-            this.c = c;
-        }
-
-        @Override
-        protected Void doInBackground(Void... errors) {
-            String category;
-            pm = c.getPackageManager();
-            List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-            Iterator<ApplicationInfo> iterator = packages.iterator();
-            while (iterator.hasNext()) {
-                ApplicationInfo packageInfo = iterator.next();
-
-                if (genreBox.query().equal(AppGenre_.appPackage, packageInfo.packageName).build().findFirst() == null) {
-                    String query_url = GOOGLE_URL + packageInfo.packageName;
-                    Log.i(TAG, query_url);
-                    category = getCategory(query_url);
-                    genreBox.put(new AppGenre(0, packageInfo.packageName, category));
-                }
-            }
-            return null;
-        }
-
-
-        private String getCategory(String query_url) {
-
-            try {
-                //Document doc = Jsoup.connect("https://play.google.com/store/apps/details?id=com.mxtech.videoplayer.ad").get();
-                Document doc = Jsoup.connect(query_url).get();
-                genre = doc.getElementsByAttributeValue("itemprop", "genre").text();
-                Log.d("Genre", genre);
-                return genre;
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                return "Unknown";
-            }
-
-        }
-    }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView labelText;

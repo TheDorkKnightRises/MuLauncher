@@ -1,6 +1,7 @@
 package com.mulauncher.ui.activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
@@ -19,10 +20,12 @@ import com.mulauncher.AppConstants;
 import com.mulauncher.LauncherApplication;
 import com.mulauncher.R;
 import com.mulauncher.interfaces.AppGenreChecklistInterface;
+import com.mulauncher.interfaces.OnGenreFetchListener;
 import com.mulauncher.models.AppGenre;
 import com.mulauncher.models.AppGenre_;
 import com.mulauncher.models.Profile;
 import com.mulauncher.ui.adapters.AppGenreAdapter;
+import com.mulauncher.util.FetchCategoryTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +33,9 @@ import java.util.Map;
 
 import io.objectbox.Box;
 
-public class CreateProfileActivity extends AppCompatActivity implements AppGenreChecklistInterface {
+public class CreateProfileActivity extends AppCompatActivity
+        implements AppGenreChecklistInterface
+        , OnGenreFetchListener {
 
     EditText profilename;
     FloatingActionButton button;
@@ -44,6 +49,8 @@ public class CreateProfileActivity extends AppCompatActivity implements AppGenre
     PackageManager pm;
     Boolean first = true;
     Box genreBox;
+    FetchCategoryTask fetchCategoryTask;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,14 +62,20 @@ public class CreateProfileActivity extends AppCompatActivity implements AppGenre
         appGenreList = new ArrayList<>();
 
         appListRecyclerView = findViewById(R.id.appListRecyclerView);
-        appListRecyclerView.setAdapter(new AppGenreAdapter(this, this));
-        appListRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
 
         profilename = findViewById(R.id.profile_edittext);
         button = findViewById(R.id.done_button);
         profile = new Profile();
 
         pm = CreateProfileActivity.this.getPackageManager();
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setTitle(R.string.progress_msg);
+        progressDialog.create();
+        progressDialog.show();
+        fetchCategoryTask = new FetchCategoryTask(this, this);
+        fetchCategoryTask.execute();
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,5 +143,13 @@ public class CreateProfileActivity extends AppCompatActivity implements AppGenre
     @Override
     public void setAppGenreList(Map<String, Integer> appGenreMap) {
         this.appGenreMap = appGenreMap;
+    }
+
+    @Override
+    public void onGenreFetch() {
+        if (progressDialog.isShowing())
+            progressDialog.cancel();
+        appListRecyclerView.setAdapter(new AppGenreAdapter(this, this));
+        appListRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
     }
 }
