@@ -70,9 +70,37 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "4:2358360728635203282",
+      "lastPropertyId": "5:1775107805788906086",
+      "name": "AppCount",
+      "properties": [
+        {
+          "id": "1:5741287557211236255",
+          "name": "count"
+        },
+        {
+          "id": "2:4985239168120840418",
+          "name": "packageName"
+        },
+        {
+          "id": "3:1218080765687103259",
+          "name": "id"
+        },
+        {
+          "id": "4:6306412162892415833",
+          "name": "username"
+        },
+        {
+          "id": "5:1775107805788906086",
+          "name": "profileName"
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "3:3610538435076225807",
+  "lastEntityId": "4:2358360728635203282",
   "lastIndexId": "1:1756889971596768297",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",

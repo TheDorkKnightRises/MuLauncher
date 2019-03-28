@@ -19,6 +19,8 @@ import com.mulauncher.AppConstants;
 import com.mulauncher.BuildConfig;
 import com.mulauncher.LauncherApplication;
 import com.mulauncher.R;
+import com.mulauncher.models.AppCount;
+import com.mulauncher.models.AppCount_;
 import com.mulauncher.models.AppInfo;
 import com.mulauncher.models.Profile;
 import com.mulauncher.models.Profile_;
@@ -29,39 +31,39 @@ import java.util.Comparator;
 import java.util.List;
 
 import io.objectbox.Box;
+import io.objectbox.query.QueryBuilder;
 
 public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHolder> {
     public static final int TYPE_LIST = 0;
     public static final int TYPE_GRID = 1;
     private List<AppInfo> appsList;
     private int type;
-
+    Box appCountBox;
+    String username;
+    Profile profile;
+    String profileName;
     public AppListAdapter(Context c, int type) {
 
         // Set type (list or grid)
         this.type = type;
-
         //This is where we build our list of app details, using the app
         //object we created to store the label, package name and icon
-
         PackageManager pm = c.getPackageManager();
         Box profileBox;
-        Profile profile;
         String[] packages;
         List<String> packagelist;
         List<Profile> proList;
-        //Need to know more about SharedPreferences .....on using USER_NAME instead of USER_PREFERENCE..NULL Pointer Exception
         SharedPreferences userpref = c.getSharedPreferences(AppConstants.USER_PREFERENCES, Context.MODE_PRIVATE);
-        String username = userpref.getString(AppConstants.USER_NAME, "");
-
+        username = userpref.getString(AppConstants.USER_NAME, "");
         appsList = new ArrayList<>();
-
+        appCountBox = ((LauncherApplication) c.getApplicationContext()).getBoxStore().boxFor(AppCount.class);
         Intent i = new Intent(Intent.ACTION_MAIN, null);
         i.addCategory(Intent.CATEGORY_LAUNCHER);
 
         List<ResolveInfo> allApps = pm.queryIntentActivities(i, 0);
 
         if ("".equals(userpref.getString(username + AppConstants.USER_LAST_PROFILE, ""))) {
+            profileName = "";
             for (ResolveInfo ri : allApps) {
                 if (ri.activityInfo.packageName.equals(BuildConfig.APPLICATION_ID))
                     continue;
@@ -89,7 +91,7 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHold
             profile = (Profile) profileBox.query().equal(Profile_.profileName, userpref.getString(username + AppConstants.USER_LAST_PROFILE, ""))
                     .equal(Profile_.username, username)
                     .build().findFirst();
-
+            profileName = profile.getProfileName();
 
             String profiles = profile.getAppsPackageList();
             if (profiles.isEmpty()) {
@@ -186,7 +188,26 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHold
             int pos = getAdapterPosition();
             Context context = v.getContext();
 
-            Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(appsList.get(pos).getPackageName().toString());
+            String packageName = appsList.get(pos).getPackageName().toString();
+            Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
+            QueryBuilder<AppCount> builder = appCountBox.query().equal(AppCount_.packageName, packageName)
+                    .equal(AppCount_.profileName, profileName)
+                    .equal(AppCount_.username, username);
+            List<AppCount> appCounts = builder.build().find();
+            AppCount appCount;
+            int count = 0;
+            if (appCounts.size() > 0) {
+                appCount = appCounts.get(0);
+                count = appCount.getCount();
+            } else {
+                appCount = new AppCount();
+                appCount.setPackageName(packageName);
+                appCount.setProfileName(profileName);
+                appCount.setUsername(username);
+            }
+            appCount.setCount(++count);
+            appCountBox.put(appCount);
+            Toast.makeText(context, "Launch count: " + count, Toast.LENGTH_SHORT).show();
             context.startActivity(launchIntent);
 
         }
