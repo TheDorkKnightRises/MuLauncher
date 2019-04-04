@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -15,9 +16,10 @@ import com.mulauncher.AppConstants;
 import com.mulauncher.R;
 import com.mulauncher.services.LockScreenService;
 import com.mulauncher.ui.adapters.AppListAdapter;
+import com.mulauncher.ui.adapters.AppUsageListAdapter;
 
 public class HomeActivity extends AppCompatActivity {
-    RecyclerView appListRecyclerView;
+    RecyclerView appListRecyclerView, appUsageListRecyclerView;
     ImageButton settingsButton;
     SharedPreferences app_preferences, user_preferences, profile_preference;
     int gridSpan;
@@ -44,6 +46,10 @@ public class HomeActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_home);
 
+        appUsageListRecyclerView = findViewById(R.id.mostUsedAppListRecyclerView);
+        appUsageListRecyclerView.setAdapter(new AppUsageListAdapter(this));
+        Log.e("AppUsageList", "Count:" + appUsageListRecyclerView.getAdapter().getItemCount());
+
         appListRecyclerView = findViewById(R.id.appListRecyclerView);
         appListRecyclerView.setAdapter(new AppListAdapter(this, AppListAdapter.TYPE_LIST));
 
@@ -67,6 +73,10 @@ public class HomeActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.welcome_header)).setText(getString(R.string.welcome_comma, username));
             ((TextView) findViewById(R.id.profile_header)).setText(profile);
         }
+
+        appUsageListRecyclerView = findViewById(R.id.mostUsedAppListRecyclerView);
+        appUsageListRecyclerView.setLayoutManager(new GridLayoutManager(this, 5));
+        appUsageListRecyclerView.setAdapter(new AppUsageListAdapter(this));
 
         appListRecyclerView = findViewById(R.id.appListRecyclerView);
         appListRecyclerView.setAdapter(new AppListAdapter(this, AppListAdapter.TYPE_LIST));

@@ -56,6 +56,7 @@
     <string name="invalid_admin_credentials">Invalid admin credentials</string>
     <string name="no_apps_in_profile">No apps in profile</string>
     <string name="progress_msg">Fetching app categories...</string>
+    <string name="most_used_apps">Most used apps</string>
 
     <string-array name="list_types">
         <item>List</item>
