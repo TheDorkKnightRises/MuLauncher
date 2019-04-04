@@ -96,7 +96,6 @@ public class AppGenreAdapter extends RecyclerView.Adapter<AppGenreAdapter.ViewHo
     }
 
 
-
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView labelText;
         public CheckBox checkBox;

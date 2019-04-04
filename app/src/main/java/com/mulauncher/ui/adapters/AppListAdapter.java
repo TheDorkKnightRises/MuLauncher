@@ -42,6 +42,7 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHold
     String username;
     Profile profile;
     String profileName;
+
     public AppListAdapter(Context c, int type) {
 
         // Set type (list or grid)

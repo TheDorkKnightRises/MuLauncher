@@ -102,8 +102,7 @@ public class LocationActivity extends FragmentActivity implements OnCompleteList
                 if (!mGeofenceList.isEmpty()) {
                     addGeofences();
                     //ToDo: Add Location details into Profile
-                }
-                else
+                } else
                     Toast.makeText(LocationActivity.this, "Waiting for location", Toast.LENGTH_SHORT).show();
 
                 profileBox.put(profile);
