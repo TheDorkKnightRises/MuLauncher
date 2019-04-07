@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -47,11 +46,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         appUsageListRecyclerView = findViewById(R.id.mostUsedAppListRecyclerView);
-        appUsageListRecyclerView.setAdapter(new AppUsageListAdapter(this));
-        Log.e("AppUsageList", "Count:" + appUsageListRecyclerView.getAdapter().getItemCount());
-
         appListRecyclerView = findViewById(R.id.appListRecyclerView);
-        appListRecyclerView.setAdapter(new AppListAdapter(this, AppListAdapter.TYPE_LIST));
 
         settingsButton = findViewById(R.id.settings_button);
         settingsButton.setOnClickListener(new View.OnClickListener() {

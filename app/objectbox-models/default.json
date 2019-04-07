@@ -29,7 +29,7 @@
     },
     {
       "id": "2:7283092721960082818",
-      "lastPropertyId": "5:8838635658751002966",
+      "lastPropertyId": "7:2365184127067354843",
       "name": "Profile",
       "properties": [
         {
@@ -47,6 +47,14 @@
         {
           "id": "5:8838635658751002966",
           "name": "appsPackageList"
+        },
+        {
+          "id": "6:5873078005632719538",
+          "name": "latitude"
+        },
+        {
+          "id": "7:2365184127067354843",
+          "name": "longitude"
         }
       ],
       "relations": []

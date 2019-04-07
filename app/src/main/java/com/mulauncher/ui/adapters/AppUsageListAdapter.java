@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mulauncher.AppConstants;
-import com.mulauncher.BuildConfig;
 import com.mulauncher.LauncherApplication;
 import com.mulauncher.R;
 import com.mulauncher.models.AppCount;
@@ -26,7 +25,6 @@ import com.mulauncher.models.Profile;
 import com.mulauncher.models.Profile_;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -59,26 +57,7 @@ public class AppUsageListAdapter extends RecyclerView.Adapter<AppUsageListAdapte
 
         List<ResolveInfo> allApps = pm.queryIntentActivities(i, 0);
 
-        if ("".equals(userpref.getString(username + AppConstants.USER_LAST_PROFILE, ""))) {
-            profileName = "";
-            for (ResolveInfo ri : allApps) {
-                if (ri.activityInfo.packageName.equals(BuildConfig.APPLICATION_ID))
-                    continue;
-                AppInfo app = new AppInfo();
-                app.setLabel(ri.loadLabel(pm));
-                app.setPackageName(ri.activityInfo.packageName);
-                app.setIcon(ri.activityInfo.loadIcon(pm));
-                appsList.add(app);
-            }
-
-            // Sort based on app name (label) ignoring case
-            Collections.sort(appsList, new Comparator<AppInfo>() {
-                @Override
-                public int compare(AppInfo o1, AppInfo o2) {
-                    return o1.getLabel().toString().toLowerCase().compareTo(o2.getLabel().toString().toLowerCase());
-                }
-            });
-        } else {
+        if (!"".equals(userpref.getString(username + AppConstants.USER_LAST_PROFILE, ""))) {
             profileBox = ((LauncherApplication) c.getApplicationContext()).getBoxStore().boxFor(Profile.class);
 
             proList = profileBox.getAll();
