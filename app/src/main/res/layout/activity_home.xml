@@ -57,6 +57,18 @@
         android:text="@string/most_used_apps"
         app:layout_constraintTop_toBottomOf="@id/header" />
 
+    <TextView
+        android:id="@+id/most_used_apps_prompt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:gravity="center_horizontal"
+        android:text="@string/most_used_apps_prompt"
+        android:textColor="#666666"
+        app:layout_constraintBottom_toBottomOf="@id/mostUsedAppListRecyclerView"
+        app:layout_constraintTop_toBottomOf="@id/mostUsedHeader" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/mostUsedAppListRecyclerView"
         android:layout_width="match_parent"
@@ -64,16 +76,24 @@
         android:layout_gravity="center"
         android:clipToPadding="false"
         android:fitsSystemWindows="false"
+        android:minHeight="64dp"
         android:orientation="horizontal"
         android:requiresFadingEdge="vertical"
         app:layout_constraintTop_toBottomOf="@id/mostUsedHeader" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="8dp"
+        android:background="#999"
+        app:layout_constraintTop_toBottomOf="@id/mostUsedAppListRecyclerView" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/appListRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:clipToPadding="false"
         android:fitsSystemWindows="false"
         android:requiresFadingEdge="vertical"

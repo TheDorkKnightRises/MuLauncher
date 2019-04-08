@@ -71,7 +71,11 @@ public class HomeActivity extends AppCompatActivity {
 
         appUsageListRecyclerView = findViewById(R.id.mostUsedAppListRecyclerView);
         appUsageListRecyclerView.setLayoutManager(new GridLayoutManager(this, 5));
-        appUsageListRecyclerView.setAdapter(new AppUsageListAdapter(this));
+        AppUsageListAdapter appUsageListAdapter = new AppUsageListAdapter(this);
+        appUsageListRecyclerView.setAdapter(appUsageListAdapter);
+        if (appUsageListAdapter.getItemCount() != 0) {
+            findViewById(R.id.most_used_apps_prompt).setVisibility(View.GONE);
+        }
 
         appListRecyclerView = findViewById(R.id.appListRecyclerView);
         appListRecyclerView.setAdapter(new AppListAdapter(this, AppListAdapter.TYPE_LIST));
