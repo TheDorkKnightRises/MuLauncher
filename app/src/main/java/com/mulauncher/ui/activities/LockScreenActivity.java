@@ -53,6 +53,7 @@ public class LockScreenActivity extends AppCompatActivity implements LockscreenL
     Box profileBox;
     SharedPreferences userpref;
     private FusedLocationProviderClient mFusedLocationClient;
+    private LocationCallback locationCallback;
 
     public static double distance(double lat1, double lat2, double lon1, double lon2) {
 
@@ -91,11 +92,6 @@ public class LockScreenActivity extends AppCompatActivity implements LockscreenL
         userpref = getSharedPreferences(AppConstants.USER_PREFERENCES, Context.MODE_PRIVATE);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        if (checkPermissions()) {
-            createLocationRequest();
-        } else {
-            requestPermissions();
-        }
 
         StateListener phoneStateListener = new StateListener();
         TelephonyManager telephonymanager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
@@ -105,6 +101,25 @@ public class LockScreenActivity extends AppCompatActivity implements LockscreenL
         ViewPager pager = findViewById(R.id.viewPager);
         pager.setAdapter(new SwipePagerAdapter(getSupportFragmentManager()));
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (checkPermissions()) {
+            createLocationRequest();
+        } else {
+            requestPermissions();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (locationCallback != null) {
+            mFusedLocationClient.removeLocationUpdates(locationCallback);
+            locationCallback = null;
+        }
     }
 
     @Override
@@ -128,8 +143,8 @@ public class LockScreenActivity extends AppCompatActivity implements LockscreenL
 
     protected void createLocationRequest() {
         final LocationRequest mLocationRequest = LocationRequest.create();
-        mLocationRequest.setInterval(2000);
-        mLocationRequest.setFastestInterval(2000);
+        mLocationRequest.setInterval(1000);
+        mLocationRequest.setFastestInterval(1000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
@@ -142,17 +157,27 @@ public class LockScreenActivity extends AppCompatActivity implements LockscreenL
             @SuppressLint("MissingPermission")
             @Override
             public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                mFusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if (location == null) {
+                            return;
+                        }
+                        LockScreenActivity.this.location = location;
+                    }
+                });
+                locationCallback = new LocationCallback() {
+                    @Override
+                    public void onLocationResult(LocationResult locationResult) {
+                        if (locationResult == null) {
+                            return;
+                        }
+                        LockScreenActivity.this.location = locationResult.getLastLocation();
+                    }
+                };
+
                 mFusedLocationClient.requestLocationUpdates(mLocationRequest,
-                        new LocationCallback() {
-                            @Override
-                            public void onLocationResult(LocationResult locationResult) {
-                                if (locationResult == null) {
-                                    return;
-                                }
-                                LockScreenActivity.this.location = locationResult.getLastLocation();
-                            }
-                        },
-                        null /* Looper */);
+                        locationCallback, null /* Looper */);
             }
         });
 
