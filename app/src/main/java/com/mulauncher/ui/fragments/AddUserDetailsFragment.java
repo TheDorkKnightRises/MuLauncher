@@ -1,6 +1,8 @@
 package com.mulauncher.ui.fragments;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,14 +16,16 @@ import com.mulauncher.AppConstants;
 import com.mulauncher.LauncherApplication;
 import com.mulauncher.R;
 import com.mulauncher.models.User;
+import com.mulauncher.ui.activities.PatternSetActivity;
 
 import io.objectbox.Box;
 
 public class AddUserDetailsFragment extends Fragment {
     Context context;
     EditText usernameEditText, passwordEditText; //, confirmPasswordEditText;
-    TextView face_lock;
+    TextView patternLockButton;
     Box userBox;
+    String pattern;
 
     public AddUserDetailsFragment() {
         // Required empty public constructor
@@ -46,19 +50,25 @@ public class AddUserDetailsFragment extends Fragment {
 
         usernameEditText = view.findViewById(R.id.name_edittext);
         passwordEditText = view.findViewById(R.id.password_edittext);
-        //face_lock = view.findViewById(R.id.button_face_lock);
-        //confirmPasswordEditText = view.findViewById(R.id.confirm_password_edittext);
-        /*
-        face_lock.setOnClickListener(new View.OnClickListener() {
+        patternLockButton = view.findViewById(R.id.button_pattern);
+
+        patternLockButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(AddUserDetailsFragment.this.context, FaceRegistration.class);
-                startActivity(i);
+                Intent i = new Intent(AddUserDetailsFragment.this.context, PatternSetActivity.class);
+                startActivityForResult(i, 101);
             }
         });
-        */
 
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 101 && resultCode == Activity.RESULT_OK) {
+            pattern = data.getStringExtra("pattern");
+            patternLockButton.setEnabled(false);
+        }
     }
 
     public void saveDetails(boolean isAdmin) {
@@ -70,7 +80,11 @@ public class AddUserDetailsFragment extends Fragment {
                     .apply();
             //create database here
             userBox = ((LauncherApplication) context.getApplicationContext()).getBoxStore().boxFor(User.class);
-            userBox.put(new User(0, usernameEditText.getText().toString(), passwordEditText.getText().toString(), isAdmin));
+            User user = new User(0, usernameEditText.getText().toString(), passwordEditText.getText().toString(), isAdmin);
+            if (pattern != null) {
+                user.setPattern(pattern);
+            }
+            userBox.put(user);
         }
     }
 

@@ -41,20 +41,18 @@
             android:hint="@string/confirm_password"
             android:inputType="textPassword" />
 
-        <!--
         <TextView
-            android:id="@+id/button_face_lock"
+            android:id="@+id/button_pattern"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_margin="8dp"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
-            android:drawableStart="@drawable/ic_face_black_24dp"
+            android:drawableStart="@drawable/ic_gesture_black_24dp"
             android:drawablePadding="8dp"
             android:gravity="center_vertical"
-            android:text="@string/use_face_unlock"
+            android:text="@string/use_pattern_lock"
             android:textAppearance="@style/TextAppearance.AppCompat.Button" />
-            -->
 
 
     </LinearLayout>

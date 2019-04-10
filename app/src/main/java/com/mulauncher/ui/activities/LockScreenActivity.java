@@ -41,6 +41,7 @@ import com.mulauncher.models.Profile;
 import com.mulauncher.models.Profile_;
 import com.mulauncher.ui.fragments.LockscreenClockFragment;
 import com.mulauncher.ui.fragments.LockscreenLoginFragment;
+import com.mulauncher.util.CustomViewPager;
 
 import java.util.List;
 
@@ -54,6 +55,7 @@ public class LockScreenActivity extends AppCompatActivity implements LockscreenL
     SharedPreferences userpref;
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationCallback locationCallback;
+    CustomViewPager pager;
 
     public static double distance(double lat1, double lat2, double lon1, double lon2) {
 
@@ -98,14 +100,39 @@ public class LockScreenActivity extends AppCompatActivity implements LockscreenL
         telephonymanager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
 
         setContentView(R.layout.activity_lock_screen_app);
-        ViewPager pager = findViewById(R.id.viewPager);
+        pager = findViewById(R.id.viewPager);
         pager.setAdapter(new SwipePagerAdapter(getSupportFragmentManager()));
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                if (i == 1) {
+                    pager.disableScroll(true);
+                } else {
+                    pager.disableScroll(false);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (pager != null && pager.getAdapter() != null) {
+            pager.setCurrentItem(0);
+        }
+
         if (checkPermissions()) {
             createLocationRequest();
         } else {

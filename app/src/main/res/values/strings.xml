@@ -58,6 +58,11 @@
     <string name="progress_msg">Fetching app categories…</string>
     <string name="most_used_apps">Most used apps</string>
     <string name="most_used_apps_prompt">(Frequently used apps will show up here)</string>
+    <string name="use_pattern_lock">Use pattern lock</string>
+    <string name="use_credentials_to_unlock">Use credentials to unlock</string>
+    <string name="use_pattern_to_unlock">Use pattern to unlock</string>
+    <string name="switch_user">Switch user</string>
+    <string name="submit">Submit</string>
 
     <string-array name="list_types">
         <item>List</item>

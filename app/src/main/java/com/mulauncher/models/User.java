@@ -9,8 +9,7 @@ public class User {
     public long id;
     boolean isAdmin;
     private String username, password;
-    //LocalDate dateOfBirth;
-    //Biometrics to be added in User model
+    String pattern;
 
 
     public User() {
@@ -59,5 +58,13 @@ public class User {
 
     public void setAdmin(boolean admin) {
         isAdmin = admin;
+    }
+
+    public String getPattern() {
+        return pattern;
+    }
+
+    public void setPattern(String pattern) {
+        this.pattern = pattern;
     }
 }
