@@ -44,8 +44,7 @@
             android:layout_height="64dp"
             android:layout_gravity="end"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_settings_black_24dp"
-            android:tint="#fff" />
+            android:src="@drawable/ic_settings_black_24dp" />
 
     </LinearLayout>
 

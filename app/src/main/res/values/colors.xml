@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorAccent">#4CAF50</color>
-    <color name="background">#424242</color>
-    <color name="backgroundDark">#333333</color>
+    <color name="background">#FAFAFA</color>
+    <color name="backgroundDark">#FAFAFA</color>
 </resources>
