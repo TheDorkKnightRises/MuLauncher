@@ -16,11 +16,12 @@ import com.mulauncher.R;
 import com.mulauncher.services.LockScreenService;
 import com.mulauncher.ui.adapters.AppListAdapter;
 import com.mulauncher.ui.adapters.AppUsageListAdapter;
+import com.mulauncher.util.FetchCategoryTask;
 
 public class HomeActivity extends AppCompatActivity {
     RecyclerView appListRecyclerView, appUsageListRecyclerView;
     ImageButton settingsButton;
-    SharedPreferences app_preferences, user_preferences, profile_preference;
+    SharedPreferences app_preferences, user_preferences;
     int gridSpan;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,8 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        new FetchCategoryTask(this, null).execute();
     }
 
 

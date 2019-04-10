@@ -64,7 +64,8 @@ public class FetchCategoryTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        onGenreFetchListener.onGenreFetch();
+        if (onGenreFetchListener != null)
+            onGenreFetchListener.onGenreFetch();
     }
 
     private String getCategory(String query_url) {
@@ -74,8 +75,7 @@ public class FetchCategoryTask extends AsyncTask<Void, Void, Void> {
             Document doc = Jsoup.connect(query_url).get();
             genre = doc.getElementsByAttributeValue("itemprop", "genre").text();
             Log.d("Genre", genre);
-            return genre;
-
+            return genre.trim().equals("") ? "Unknown" : genre;
         } catch (Exception e) {
             e.printStackTrace();
             return "Unknown";
