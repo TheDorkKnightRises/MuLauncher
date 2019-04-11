@@ -92,6 +92,15 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
             }
         });
 
+        findViewById(R.id.skip_geofence).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                profileBox.put(profile);
+                user_preferences.edit().putString(profile.getUsername() + AppConstants.USER_LAST_PROFILE, profile.getProfileName()).apply();
+                finish();
+            }
+        });
+
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);

@@ -63,6 +63,7 @@
     <string name="use_pattern_to_unlock">Use pattern to unlock</string>
     <string name="switch_user">Switch user</string>
     <string name="submit">Submit</string>
+    <string name="skip">Skip</string>
 
     <string-array name="list_types">
         <item>List</item>
