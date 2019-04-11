@@ -1,5 +1,6 @@
 package com.mulauncher.ui.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -62,6 +63,10 @@ public class AppsSelectionActivity extends AppCompatActivity implements AppCheck
                 Intent i = new Intent(AppsSelectionActivity.this, LocationActivity.class);
                 i.putExtra("ProfileObject", profile);
                 startActivity(i);
+
+                Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_OK, returnIntent);
+                finish();
             }
         });
     }

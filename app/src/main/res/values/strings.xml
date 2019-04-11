@@ -64,6 +64,7 @@
     <string name="switch_user">Switch user</string>
     <string name="submit">Submit</string>
     <string name="skip">Skip</string>
+    <string name="select_manually">Select manually</string>
 
     <string-array name="list_types">
         <item>List</item>

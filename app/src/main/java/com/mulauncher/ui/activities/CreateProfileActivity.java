@@ -77,6 +77,35 @@ public class CreateProfileActivity extends AppCompatActivity
         fetchCategoryTask = new FetchCategoryTask(this, this);
         fetchCategoryTask.execute();
 
+        findViewById(R.id.manualSelectionButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String profileName = profilename.getText().toString().trim();
+
+                if (profileName.isEmpty()) {
+                    Toast.makeText(CreateProfileActivity.this, getString(R.string.profile_name_empty_error), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                Bundle extras = getIntent().getExtras();
+
+                if (extras == null) {
+                    Toast.makeText(CreateProfileActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                username = extras.getString(AppConstants.USER_NAME, "");
+                profile.setProfileName(profileName);
+                profile.setUsername(username);
+
+                Intent i = new Intent(CreateProfileActivity.this, AppsSelectionActivity.class);
+                i.putExtra("ProfileObject", profile);
+                i.putExtra(AppConstants.USER_NAME, username);
+                startActivity(i);
+                finish();
+            }
+        });
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,6 +137,7 @@ public class CreateProfileActivity extends AppCompatActivity
                 if (appGenreList.isEmpty()) {
                     Intent i = new Intent(CreateProfileActivity.this, AppsSelectionActivity.class);
                     i.putExtra("ProfileObject", profile);
+                    i.putExtra(AppConstants.USER_NAME, username);
                     startActivity(i);
                 } else {
 
