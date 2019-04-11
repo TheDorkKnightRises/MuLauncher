@@ -66,18 +66,30 @@ public class HomeActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         String username = user_preferences.getString(AppConstants.USER_NAME, getString(R.string.user));
-        String profile = user_preferences.getString(username + AppConstants.USER_LAST_PROFILE, getString(R.string.def));
+        String profile = user_preferences.getString(username + AppConstants.USER_LAST_PROFILE, "");
+
+        if ("".equals(profile)) {
+            appUsageListRecyclerView.setVisibility(View.GONE);
+            findViewById(R.id.most_used_apps_prompt).setVisibility(View.GONE);
+            findViewById(R.id.mostUsedHeader).setVisibility(View.GONE);
+            profile = getString(R.string.def);
+        } else {
+            appUsageListRecyclerView.setVisibility(View.VISIBLE);
+            findViewById(R.id.most_used_apps_prompt).setVisibility(View.VISIBLE);
+            findViewById(R.id.mostUsedHeader).setVisibility(View.VISIBLE);
+
+            appUsageListRecyclerView = findViewById(R.id.mostUsedAppListRecyclerView);
+            appUsageListRecyclerView.setLayoutManager(new GridLayoutManager(this, 5));
+            AppUsageListAdapter appUsageListAdapter = new AppUsageListAdapter(this);
+            appUsageListRecyclerView.setAdapter(appUsageListAdapter);
+            if (appUsageListAdapter.getItemCount() != 0) {
+                findViewById(R.id.most_used_apps_prompt).setVisibility(View.GONE);
+            }
+
+        }
         if (!"".equals(username)) {
             ((TextView) findViewById(R.id.welcome_header)).setText(getString(R.string.welcome_comma, username));
             ((TextView) findViewById(R.id.profile_header)).setText(profile);
-        }
-
-        appUsageListRecyclerView = findViewById(R.id.mostUsedAppListRecyclerView);
-        appUsageListRecyclerView.setLayoutManager(new GridLayoutManager(this, 5));
-        AppUsageListAdapter appUsageListAdapter = new AppUsageListAdapter(this);
-        appUsageListRecyclerView.setAdapter(appUsageListAdapter);
-        if (appUsageListAdapter.getItemCount() != 0) {
-            findViewById(R.id.most_used_apps_prompt).setVisibility(View.GONE);
         }
 
         appListRecyclerView = findViewById(R.id.appListRecyclerView);
