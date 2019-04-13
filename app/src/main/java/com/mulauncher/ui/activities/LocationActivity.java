@@ -38,6 +38,7 @@ import com.mulauncher.AppConstants;
 import com.mulauncher.LauncherApplication;
 import com.mulauncher.R;
 import com.mulauncher.models.Profile;
+import com.mulauncher.models.Profile_;
 
 import io.objectbox.Box;
 
@@ -85,6 +86,13 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
                 } else
                     Toast.makeText(LocationActivity.this, "Waiting for location", Toast.LENGTH_SHORT).show();
 
+                Profile existingProfile = (Profile) profileBox.query()
+                        .equal(Profile_.profileName, profile.getProfileName())
+                        .equal(Profile_.username, profile.getUsername()).build().findFirst();
+                if (existingProfile != null) {
+                    // TODO: Maybe we could warn user before overwriting their existing profile
+                    profileBox.remove(existingProfile);
+                }
                 profileBox.put(profile);
                 user_preferences.edit().putString(profile.getUsername() + AppConstants.USER_LAST_PROFILE, profile.getProfileName()).apply();
                 finish();
@@ -95,6 +103,13 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
         findViewById(R.id.skip_geofence).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Profile existingProfile = (Profile) profileBox.query()
+                        .equal(Profile_.profileName, profile.getProfileName())
+                        .equal(Profile_.username, profile.getUsername()).build().findFirst();
+                if (existingProfile != null) {
+                    // TODO: Maybe we could warn user before overwriting their existing profile
+                    profileBox.remove(existingProfile);
+                }
                 profileBox.put(profile);
                 user_preferences.edit().putString(profile.getUsername() + AppConstants.USER_LAST_PROFILE, profile.getProfileName()).apply();
                 finish();
