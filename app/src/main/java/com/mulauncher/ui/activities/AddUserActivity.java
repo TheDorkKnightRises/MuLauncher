@@ -28,58 +28,37 @@ import io.objectbox.Box;
 public class AddUserActivity extends AppCompatActivity {
     private static final int REQUEST_PROFILE_CREATION = 123;
     AddUserDetailsFragment addUserDetailsFragment;
+    boolean isAdmin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_user);
 
-        final ViewGroup rootView = findViewById(R.id.rootView);
+        isAdmin = getIntent().getBooleanExtra("isAdmin", false);
+        if (isAdmin) {
+            showAddUserScene();
+        } else {
+            findViewById(R.id.unlockButton).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Box userBox = ((LauncherApplication) getApplicationContext()).getBoxStore().boxFor(User.class);
+                    final String username = ((EditText) findViewById(R.id.editTextUsername)).getText().toString();
+                    String password = ((EditText) findViewById(R.id.editTextPassword)).getText().toString();
+                    Log.d("AddUser", "Test 1");
 
-        findViewById(R.id.unlockButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                    if (userBox.query().equal(User_.username, username)
+                            .equal(User_.password, password)
+                            .equal(User_.isAdmin, true).build().find().isEmpty()) {
 
-                Box userBox = ((LauncherApplication) getApplicationContext()).getBoxStore().boxFor(User.class);
-                final String username = ((EditText) findViewById(R.id.editTextUsername)).getText().toString();
-                String password = ((EditText) findViewById(R.id.editTextPassword)).getText().toString();
-                Log.d("AddUser", "Test 1");
-
-                if (userBox.query().equal(User_.username, username)
-                        .equal(User_.password, password)
-                        .equal(User_.isAdmin, true).build().find().isEmpty()) {
-
-                    Log.d("AddUser", "Test 2");
-
-                    Toast.makeText(AddUserActivity.this, getString(R.string.invalid_admin_credentials), Toast.LENGTH_SHORT).show();
-                } else {
-
-                    Scene newScene = Scene.getSceneForLayout(rootView, R.layout.layout_add_user, AddUserActivity.this);
-                    Transition transition = new Fade();
-                    TransitionManager.go(newScene, transition);
-
-
-                    Log.d("AddUser", "Test 3");
-                    addUserDetailsFragment = AddUserDetailsFragment.newInstance(AddUserActivity.this);
-
-                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    ft.replace(R.id.fragment, addUserDetailsFragment);
-                    ft.commit();
-
-                    findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            Intent i = new Intent(AddUserActivity.this, CreateProfileActivity.class);
-                            String username = ((EditText) findViewById(R.id.name_edittext)).getText().toString();
-                            i.putExtra(AppConstants.USER_NAME, username);
-                            startActivityForResult(i, REQUEST_PROFILE_CREATION);
-
-                        }
-                    });
+                        Toast.makeText(AddUserActivity.this, getString(R.string.invalid_admin_credentials), Toast.LENGTH_SHORT).show();
+                    } else {
+                        showAddUserScene();
+                    }
                 }
-            }
-        });
+            });
+        }
+
 
     }
 
@@ -87,9 +66,54 @@ public class AddUserActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_PROFILE_CREATION && resultCode == Activity.RESULT_OK) {
-            addUserDetailsFragment.saveDetails(false);
-            Toast.makeText(AddUserActivity.this, "Added user", Toast.LENGTH_SHORT).show();
-            finish();
+            addUser();
+        }
+    }
+
+    private void addUser() {
+        addUserDetailsFragment.saveDetails(isAdmin);
+        Toast.makeText(AddUserActivity.this, "Added user", Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+    private void showAddUserScene() {
+
+        final ViewGroup rootView = findViewById(R.id.rootView);
+
+        Scene newScene = Scene.getSceneForLayout(rootView, R.layout.layout_add_user, AddUserActivity.this);
+        Transition transition = new Fade();
+        TransitionManager.go(newScene, transition);
+
+        addUserDetailsFragment = AddUserDetailsFragment.newInstance(AddUserActivity.this);
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment, addUserDetailsFragment);
+        ft.commit();
+
+        if (isAdmin) {
+            findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addUser();
+                }
+            });
+        } else {
+            findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(AddUserActivity.this, CreateProfileActivity.class);
+                    String username = ((EditText) findViewById(R.id.name_edittext)).getText().toString();
+                    i.putExtra(AppConstants.USER_NAME, username);
+                    startActivityForResult(i, REQUEST_PROFILE_CREATION);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!isAdmin) {
+            super.onBackPressed();
         }
     }
 }

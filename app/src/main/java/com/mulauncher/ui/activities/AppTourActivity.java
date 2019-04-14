@@ -3,9 +3,7 @@ package com.mulauncher.ui.activities;
 import android.os.Bundle;
 
 import com.heinrichreimersoftware.materialintro.app.IntroActivity;
-import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
 import com.heinrichreimersoftware.materialintro.slide.SimpleSlide;
-import com.heinrichreimersoftware.materialintro.view.FadeableViewPager;
 import com.mulauncher.R;
 import com.mulauncher.ui.fragments.AddUserDetailsFragment;
 
@@ -60,33 +58,8 @@ public class AppTourActivity extends IntroActivity {
                 .scrollable(false)
                 .build());
 
-        addSlide(new FragmentSlide.Builder()
-                .background(R.color.background)
-                .backgroundDark(R.color.backgroundDark)
-                .fragment(addUserDetailsFragment)
-                .build());
-
         autoplay(5000, INFINITE);
         setPageScrollDuration(500);
-
-        addOnPageChangeListener(new FadeableViewPager.OnOverscrollPageChangeListener() {
-            @Override
-            public void onPageScrolled(int i, float v, int i1) {
-                if (i == 5) {
-                    addUserDetailsFragment.saveDetails(true);
-                }
-            }
-
-            @Override
-            public void onPageSelected(int i) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-
-            }
-        });
 
     }
 

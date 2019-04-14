@@ -30,6 +30,12 @@ public class HomeActivity extends AppCompatActivity {
         app_preferences = getSharedPreferences(AppConstants.APP_PREFERENCES, MODE_PRIVATE);
         user_preferences = getSharedPreferences(AppConstants.USER_PREFERENCES, MODE_PRIVATE);
 
+        if ("".equals(user_preferences.getString(AppConstants.USER_NAME, ""))) {
+            Intent intent = new Intent(HomeActivity.this, AddUserActivity.class);
+            intent.putExtra("isAdmin", true);
+            startActivity(intent);
+        }
+
         if (app_preferences.getBoolean(AppConstants.FIRST_LAUNCH, true)) {
             Intent intent = new Intent(HomeActivity.this, AppTourActivity.class);
             startActivity(intent);
