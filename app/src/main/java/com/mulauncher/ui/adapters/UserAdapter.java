@@ -1,6 +1,7 @@
 package com.mulauncher.ui.adapters;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -86,7 +87,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                     Box userBox = ((LauncherApplication) context.getApplicationContext()).getBoxStore().boxFor(User.class);
                     userBox.remove(user);
                     userList.remove(user);
-                    UserAdapter.this.notifyDataSetChanged();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            UserAdapter.this.notifyDataSetChanged();
+                        }
+                    }, 500);
                     Toast.makeText(context, context.getString(R.string.removed_user) + " " + user.getUsername(), Toast.LENGTH_SHORT).show();
                 }
             });
