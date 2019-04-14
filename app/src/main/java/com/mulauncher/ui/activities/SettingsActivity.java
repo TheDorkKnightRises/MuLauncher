@@ -8,17 +8,25 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.mulauncher.AppConstants;
+import com.mulauncher.LauncherApplication;
 import com.mulauncher.R;
+import com.mulauncher.models.User;
+import com.mulauncher.models.User_;
+
+import io.objectbox.Box;
 
 public class SettingsActivity extends AppCompatActivity {
     int listType;
     View appListPreferenceView;
     TextView appListPreferenceTextView;
+    SharedPreferences preferences, userPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        preferences = getSharedPreferences(AppConstants.APP_PREFERENCES, MODE_PRIVATE);
 
         findViewById(R.id.manage_profiles).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +59,6 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        final SharedPreferences preferences = getSharedPreferences(AppConstants.APP_PREFERENCES, MODE_PRIVATE);
         listType = preferences.getInt(AppConstants.APP_LIST_TYPE, 0);
         String listTypeString = (listType == 0) ? getString(R.string.list) : getString(R.string.grid);
         appListPreferenceView = findViewById(R.id.app_list_display);
@@ -70,4 +77,28 @@ public class SettingsActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        userPreferences = getSharedPreferences(AppConstants.USER_PREFERENCES, MODE_PRIVATE);
+
+        Box userBox = ((LauncherApplication) getApplicationContext()).getBoxStore().boxFor(User.class);
+        User currentUser = (User) userBox.query().equal(User_.username,
+                userPreferences.getString(AppConstants.USER_NAME, ""))
+                .build()
+                .findFirst();
+        if (!currentUser.isAdmin()) {
+            findViewById(R.id.manage_users).setVisibility(View.GONE);
+        } else {
+            findViewById(R.id.manage_users).setVisibility(View.VISIBLE);
+            findViewById(R.id.manage_users).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(SettingsActivity.this, ManageUsersActivity.class));
+                }
+            });
+        }
+
+    }
 }
