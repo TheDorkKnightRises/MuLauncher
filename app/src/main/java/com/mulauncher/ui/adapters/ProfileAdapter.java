@@ -21,8 +21,8 @@ import com.mulauncher.ui.activities.HomeActivity;
 import java.util.List;
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHolder> {
-    Context context;
-    List<Profile> profileList;
+    private Context context;
+    private List<Profile> profileList;
 
     public ProfileAdapter(Context context, List<Profile> profileList) {
         this.context = context;
@@ -41,10 +41,10 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ProfileAdapter.ViewHolder viewHolder, int i) {
-        String appLabel = profileList.get(i).getProfileName();
+        String label = profileList.get(i).getProfileName();
 
         TextView textView = viewHolder.labelText;
-        textView.setText(appLabel);
+        textView.setText(label);
     }
 
     @Override
@@ -52,14 +52,13 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
         return profileList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView labelText;
-        public ImageButton editButton;
-        int type;
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView labelText;
+        ImageButton editButton;
 
         //This is the subclass ViewHolder which simply
         //'holds the views' for us to show on each row
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
 
             //Finds the views from our row.xml

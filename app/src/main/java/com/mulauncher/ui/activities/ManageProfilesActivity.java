@@ -17,12 +17,10 @@ import com.mulauncher.ui.adapters.ProfileAdapter;
 import java.util.List;
 
 import io.objectbox.Box;
-import io.objectbox.query.QueryBuilder;
 
 public class ManageProfilesActivity extends AppCompatActivity {
     RecyclerView profilesRecyclerView;
-    Box profileBox, userBox;
-    QueryBuilder builder;
+    Box profileBox;
     List<Profile> profileList;
 
     @Override
