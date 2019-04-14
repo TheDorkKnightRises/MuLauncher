@@ -127,6 +127,7 @@ public class CreateProfileActivity extends AppCompatActivity
                 i.putExtra("ProfileObject", profile);
                 i.putExtra(AppConstants.USER_NAME, username);
                 startActivity(i);
+                setResult(RESULT_OK);
                 finish();
             }
         });
@@ -187,8 +188,7 @@ public class CreateProfileActivity extends AppCompatActivity
                     startActivity(i);
                 }
 
-                Intent returnIntent = new Intent();
-                setResult(Activity.RESULT_OK, returnIntent);
+                setResult(Activity.RESULT_OK);
                 finish();
             }
         });
