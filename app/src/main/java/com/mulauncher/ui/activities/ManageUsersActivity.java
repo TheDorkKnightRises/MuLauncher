@@ -38,4 +38,10 @@ public class ManageUsersActivity extends AppCompatActivity {
         usersRecyclerView.setAdapter(new UserAdapter(this, userList));
         usersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
+    }
 }
