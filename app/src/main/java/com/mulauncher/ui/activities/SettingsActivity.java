@@ -12,6 +12,7 @@ import com.mulauncher.R;
 
 public class SettingsActivity extends AppCompatActivity {
     int listType;
+    View appListPreferenceView;
     TextView appListPreferenceTextView;
 
     @Override
@@ -52,15 +53,16 @@ public class SettingsActivity extends AppCompatActivity {
 
         final SharedPreferences preferences = getSharedPreferences(AppConstants.APP_PREFERENCES, MODE_PRIVATE);
         listType = preferences.getInt(AppConstants.APP_LIST_TYPE, 0);
-        String listTypeString = (listType == 1) ? getString(R.string.list) : getString(R.string.grid);
-        appListPreferenceTextView = findViewById(R.id.app_list_display);
-        appListPreferenceTextView.setText(getString(R.string.display_apps_as, listTypeString));
-        appListPreferenceTextView.setOnClickListener(new View.OnClickListener() {
+        String listTypeString = (listType == 0) ? getString(R.string.list) : getString(R.string.grid);
+        appListPreferenceView = findViewById(R.id.app_list_display);
+        appListPreferenceTextView = findViewById(R.id.app_list_text);
+        appListPreferenceTextView.setText(listTypeString);
+        appListPreferenceView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 listType = listType ^ 1;
-                String listTypeString = (listType == 1) ? getString(R.string.list) : getString(R.string.grid);
-                appListPreferenceTextView.setText(getString(R.string.display_apps_as, listTypeString));
+                String listTypeString = (listType == 0) ? getString(R.string.list) : getString(R.string.grid);
+                appListPreferenceTextView.setText(listTypeString);
                 preferences.edit().putInt(AppConstants.APP_LIST_TYPE, listType).apply();
 
             }

@@ -43,8 +43,9 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_gravity="end"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_settings_black_24dp" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_settings_black_24dp"
+            android:tint="?attr/colorControlNormal" />
 
     </LinearLayout>
 

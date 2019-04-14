@@ -14,18 +14,32 @@
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
-
-    <TextView
+    <LinearLayout
         android:id="@+id/app_list_display"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
-        android:focusable="true"
-        android:gravity="center_vertical"
-        android:padding="16dp"
-        android:text="@string/display_apps_as"
-        android:textAppearance="@style/TextAppearance.AppCompat.Button" />
+        android:focusable="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="64dp"
+            android:gravity="center_vertical"
+            android:padding="16dp"
+            android:text="@string/display_apps_as"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button" />
+
+        <TextView
+            android:id="@+id/app_list_text"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:gravity="end|center_vertical"
+            android:padding="16dp"
+            android:text="@string/list"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/add_user"
