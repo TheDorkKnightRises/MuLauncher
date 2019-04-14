@@ -24,6 +24,7 @@ import com.mulauncher.interfaces.OnGenreFetchListener;
 import com.mulauncher.models.AppGenre;
 import com.mulauncher.models.AppGenre_;
 import com.mulauncher.models.Profile;
+import com.mulauncher.models.Profile_;
 import com.mulauncher.ui.adapters.AppGenreAdapter;
 import com.mulauncher.util.FetchCategoryTask;
 
@@ -34,13 +35,11 @@ import java.util.Map;
 import io.objectbox.Box;
 
 public class CreateProfileActivity extends AppCompatActivity
-        implements AppGenreChecklistInterface
-        , OnGenreFetchListener {
+        implements AppGenreChecklistInterface, OnGenreFetchListener {
 
-    EditText profilename;
+    EditText profileNameEditText;
     FloatingActionButton button;
     RecyclerView appListRecyclerView;
-    SharedPreferences user_preferences;
     String username;
     List<String> appGenreList;
     Map<String, Integer> appGenreMap;
@@ -63,9 +62,35 @@ public class CreateProfileActivity extends AppCompatActivity
 
         appListRecyclerView = findViewById(R.id.appListRecyclerView);
 
-        profilename = findViewById(R.id.profile_edittext);
+        profileNameEditText = findViewById(R.id.profile_edittext);
         button = findViewById(R.id.done_button);
         profile = new Profile();
+
+        if (getIntent().hasExtra("ProfileObject")) {
+            profile = (Profile) getIntent().getSerializableExtra("ProfileObject");
+            profileNameEditText.setText(profile.getProfileName());
+            profileNameEditText.setEnabled(false);
+            findViewById(R.id.delete_button).setVisibility(View.VISIBLE);
+            findViewById(R.id.delete_button).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Box profileBox = ((LauncherApplication) getApplicationContext()).getBoxStore().boxFor(Profile.class);
+                    Profile existingProfile = (Profile) profileBox.query()
+                            .equal(Profile_.profileName, profile.getProfileName())
+                            .equal(Profile_.username, profile.getUsername()).build().findFirst();
+                    if (existingProfile != null) {
+                        // TODO: Maybe we could warn user before overwriting their existing profile
+                        profileBox.remove(existingProfile);
+                        SharedPreferences preferences = getSharedPreferences(AppConstants.USER_PREFERENCES, MODE_PRIVATE);
+                        if (profile.getProfileName().equals(preferences.getString(profile.getUsername() + AppConstants.USER_LAST_PROFILE, ""))) {
+                            preferences.edit().remove(profile.getUsername() + AppConstants.USER_LAST_PROFILE).apply();
+                        }
+                    }
+                    Toast.makeText(CreateProfileActivity.this, getString(R.string.deleted), Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            });
+        }
 
         pm = CreateProfileActivity.this.getPackageManager();
 
@@ -80,7 +105,7 @@ public class CreateProfileActivity extends AppCompatActivity
         findViewById(R.id.manualSelectionButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String profileName = profilename.getText().toString().trim();
+                String profileName = profileNameEditText.getText().toString().trim();
 
                 if (profileName.isEmpty()) {
                     Toast.makeText(CreateProfileActivity.this, getString(R.string.profile_name_empty_error), Toast.LENGTH_SHORT).show();
@@ -110,7 +135,7 @@ public class CreateProfileActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
 
-                String profileName = profilename.getText().toString().trim();
+                String profileName = profileNameEditText.getText().toString().trim();
 
                 if (profileName.isEmpty()) {
                     Toast.makeText(CreateProfileActivity.this, getString(R.string.profile_name_empty_error), Toast.LENGTH_SHORT).show();

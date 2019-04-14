@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.mulauncher.AppConstants;
 import com.mulauncher.R;
 import com.mulauncher.models.Profile;
+import com.mulauncher.ui.activities.CreateProfileActivity;
 import com.mulauncher.ui.activities.HomeActivity;
 
 import java.util.List;
@@ -53,7 +54,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView labelText;
-        public ImageButton icon;
+        public ImageButton editButton;
         int type;
 
         //This is the subclass ViewHolder which simply
@@ -63,7 +64,19 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
 
             //Finds the views from our row.xml
             labelText = itemView.findViewById(R.id.profile_name);
-            icon = itemView.findViewById(R.id.edit_button);
+            editButton = itemView.findViewById(R.id.edit_button);
+            editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = getAdapterPosition();
+                    Profile profile = profileList.get(pos);
+                    if (profile != null) {
+                        Intent intent = new Intent(context, CreateProfileActivity.class);
+                        intent.putExtra("ProfileObject", profile);
+                        context.startActivity(intent);
+                    }
+                }
+            });
             itemView.setOnClickListener(this);
         }
 
@@ -71,7 +84,6 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
         public void onClick(View v) {
             int pos = getAdapterPosition();
             Log.d("Click", Integer.toString(pos));
-            // TODO: Switch profile here
             String profileName = profileList.get(pos).getProfileName();
             SharedPreferences preferences = context.getSharedPreferences(AppConstants.USER_PREFERENCES, Context.MODE_PRIVATE);
             preferences.edit().putString(preferences.getString(AppConstants.USER_NAME, "")

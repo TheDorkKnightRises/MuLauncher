@@ -29,16 +29,19 @@ public class ManageProfilesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_profiles);
+        profileBox = ((LauncherApplication) getApplicationContext()).getBoxStore().boxFor(Profile.class);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         SharedPreferences preferences = getSharedPreferences(AppConstants.USER_PREFERENCES, MODE_PRIVATE);
-        profileBox = ((LauncherApplication) getApplicationContext()).getBoxStore().boxFor(Profile.class);
-        builder = profileBox.query();
-        profileList = builder.equal(Profile_.username, preferences.getString(AppConstants.USER_NAME, "")).build().find();
+        profileList = profileBox.query().equal(Profile_.username, preferences.getString(AppConstants.USER_NAME, "")).build().find();
         for (Profile p : profileList)
             Log.d("Profile", p.getProfileName() + "\n");
         profilesRecyclerView = findViewById(R.id.profilesRecyclerView);
         profilesRecyclerView.setAdapter(new ProfileAdapter(this, profileList));
         profilesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
     }
 }
